@@ -1,0 +1,6 @@
+# Local temporary data (not committed)
+data/
+processed/
+
+# Only track archives
+!archives/
