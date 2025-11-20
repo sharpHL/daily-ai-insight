@@ -22,3 +22,4 @@ daily-insight/
 1. 主要编程语言用python，项目和包要用uv来管理
 2. 环境变量用python dotenv
 3. LLM provider用OPENAI兼容的和GEMINI API
+4. 测试要覆盖全面
