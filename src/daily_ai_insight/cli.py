@@ -15,10 +15,19 @@ from rich.logging import RichHandler
 
 # Import modules
 from daily_ai_insight.collectors import (
+    # Original collectors
     HuggingFacePapersCollector,
     RedditCollector,
     XiaohuCollector,
-    NewsAggregatorCollector
+    NewsAggregatorCollector,
+    # New collectors
+    GitHubTrendingCollector,
+    PapersCollector,
+    TwitterCollector,
+    AIBaseCollector,
+    JiqizhixinCollector,
+    QBitCollector,
+    XinZhiYuanCollector,
 )
 from daily_ai_insight.processors import DataCleaner, Deduplicator
 from daily_ai_insight.storage import StorageManager
@@ -123,10 +132,19 @@ class DailyInsightPipeline:
 
         # Initialize collectors
         collectors = [
+            # Original collectors
             HuggingFacePapersCollector(),
             RedditCollector(),
             XiaohuCollector(),
-            NewsAggregatorCollector()
+            NewsAggregatorCollector(),
+            # New collectors
+            GitHubTrendingCollector(),
+            PapersCollector(),
+            TwitterCollector(),
+            AIBaseCollector(),
+            JiqizhixinCollector(),
+            QBitCollector(),
+            XinZhiYuanCollector(),
         ]
 
         with Progress(
