@@ -1,0 +1,61 @@
+# FOLO RSS Feed Sources Configuration
+# Modify these sources according to your needs
+
+folo_sources:
+  - name: "AI Technology News"
+    category: "technology"
+    priority: "high"
+
+  - name: "Open Source Projects"
+    category: "opensource"
+    priority: "medium"
+
+  - name: "Research Papers"
+    category: "research"
+    priority: "medium"
+
+# Fallback RSS sources (when FOLO is unavailable)
+fallback_sources:
+  - name: "Hacker News Front Page"
+    url: "https://hnrss.org/frontpage"
+    category: "technology"
+
+  - name: "ArXiv AI Papers"
+    url: "http://arxiv.org/rss/cs.AI"
+    category: "research"
+
+  - name: "GitHub Trending Daily"
+    url: "https://rsshub.app/github/trending/daily/python"
+    category: "opensource"
+
+  - name: "Reddit Machine Learning"
+    url: "https://www.reddit.com/r/MachineLearning/.rss"
+    category: "community"
+
+# Filter settings
+filters:
+  # Keyword whitelist (content containing these words are prioritized)
+  keywords_include:
+    - "AI"
+    - "GPT"
+    - "LLM"
+    - "machine learning"
+    - "deep learning"
+    - "neural network"
+    - "transformer"
+    - "artificial intelligence"
+    - "large language model"
+
+  # Keyword blacklist (content containing these words are filtered out)
+  keywords_exclude:
+    - "sponsored"
+    - "advertisement"
+    - "crypto"
+    - "blockchain"
+    - "NFT"
+
+  # Minimum content length
+  min_content_length: 50
+
+  # Maximum content age (days)
+  max_age_days: 7
