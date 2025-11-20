@@ -16,7 +16,6 @@ from rich.logging import RichHandler
 # Import modules
 from daily_ai_insight.collectors import (
     # Original collectors
-    HuggingFacePapersCollector,
     RedditCollector,
     XiaohuCollector,
     NewsAggregatorCollector,
@@ -30,7 +29,7 @@ from daily_ai_insight.collectors import (
     XinZhiYuanCollector,
 )
 from daily_ai_insight.processors import DataCleaner, Deduplicator
-from daily_ai_insight.storage import StorageManager
+from daily_ai_insight.storage import create_storage
 from daily_ai_insight.llm import ContentAnalyzer
 from daily_ai_insight.renderers import MarkdownRenderer, FeishuRenderer, TelegramRenderer
 
@@ -53,7 +52,7 @@ class DailyInsightPipeline:
     """Main pipeline for Daily AI Insight."""
 
     def __init__(self):
-        self.storage = StorageManager()
+        self.storage = create_storage()  # Auto-configured from .env
         self.cleaner = DataCleaner()
         self.deduper = Deduplicator()
         self.analyzer = ContentAnalyzer(provider="gemini")
@@ -92,7 +91,7 @@ class DailyInsightPipeline:
                 items = await self._collect_data()
             else:
                 console.print("[yellow]⏭️  Skipping data collection, using existing data[/yellow]")
-                items = self.storage.load_recent_data(hours=24)
+                items = await self.storage.load_recent(hours=24)
 
             if not items:
                 console.print("[red]❌ No data collected or available[/red]")
@@ -105,7 +104,7 @@ class DailyInsightPipeline:
             console.print(f"[green]✅ Processed to {len(items)} unique items[/green]")
 
             # Save processed data
-            self.storage.save_raw_data(items, source="processed")
+            await self.storage.save_raw(items, source="processed")
 
             # Step 3: Analyze with LLM
             if not skip_analysis:
@@ -133,7 +132,6 @@ class DailyInsightPipeline:
         # Initialize collectors
         collectors = [
             # Original collectors
-            HuggingFacePapersCollector(),
             RedditCollector(),
             XiaohuCollector(),
             NewsAggregatorCollector(),
@@ -219,7 +217,7 @@ class DailyInsightPipeline:
                 progress.update(task, completed=True)
 
                 # Save analysis
-                self.storage.save_processed_data(analysis, report_type="analysis")
+                await self.storage.save_processed(analysis, report_type="analysis")
 
                 return analysis
 
@@ -288,7 +286,7 @@ class DailyInsightPipeline:
     async def _distribute_report(self, report: str, analysis: Dict[str, Any]):
         """Save and distribute report."""
         # Save to file
-        report_path = self.storage.save_report(report, format="markdown")
+        report_path = await self.storage.save_report(report, format="markdown")
         console.print(f"[green]✅ Report saved to: {report_path}[/green]")
 
         # Send to channels
@@ -354,8 +352,8 @@ async def main():
 
     # Cleanup if requested
     if args.cleanup:
-        storage = StorageManager()
-        storage.cleanup_old_files(days=7)
+        storage = create_storage()
+        await storage.cleanup(days=7)
         console.print("[green]✅ Cleaned up old files[/green]")
         return
 
