@@ -12,87 +12,10 @@ import os
 from typing import Dict, Any, List
 
 from daily_ai_insight.collectors import (
-    HuggingFacePapersCollector,
     RedditCollector,
     XiaohuCollector,
     NewsAggregatorCollector
 )
-
-
-class TestHuggingFacePapersReal:
-    """Real API tests for HuggingFace Papers collector."""
-
-    @pytest.fixture
-    def collector(self, check_env_vars):
-        """Create collector with real credentials."""
-        check_env_vars("FOLO_COOKIE", "HGPAPERS_FEED_ID")
-        return HuggingFacePapersCollector()
-
-    @pytest.mark.asyncio
-    async def test_fetch_real_data(self, collector, is_real_test):
-        """Test fetching real data from HuggingFace Papers."""
-        print(f"\n🔍 Fetching from {collector.name}...")
-
-        raw_data = await collector.fetch()
-
-        # Validate response structure
-        assert raw_data is not None, "Response should not be None"
-        assert "items" in raw_data, "Response should have 'items' key"
-        assert isinstance(raw_data["items"], list), "Items should be a list"
-
-        print(f"✓ Fetched {len(raw_data['items'])} items")
-
-        # If we got items, validate structure
-        if raw_data["items"]:
-            item = raw_data["items"][0]
-            assert "id" in item
-            assert "title" in item
-            assert "url" in item
-            assert "date_published" in item
-            print(f"✓ First item: {item['title'][:50]}...")
-
-    @pytest.mark.asyncio
-    async def test_transform_real_data(self, collector, is_real_test):
-        """Test transforming real data."""
-        raw_data = await collector.fetch()
-
-        if not raw_data["items"]:
-            pytest.skip("No items fetched, skipping transform test")
-
-        transformed = collector.transform(raw_data, "papers")
-
-        assert isinstance(transformed, list), "Transformed data should be a list"
-        assert len(transformed) == len(raw_data["items"]), "Should transform all items"
-
-        if transformed:
-            item = transformed[0]
-            # Validate unified format
-            assert "id" in item
-            assert "title" in item
-            assert "type" in item
-            assert item["type"] == "papers"
-            assert "url" in item
-            assert "published_date" in item
-            print(f"✓ Transformed {len(transformed)} items")
-
-    @pytest.mark.asyncio
-    async def test_generate_html_real_data(self, collector, is_real_test):
-        """Test HTML generation with real data."""
-        raw_data = await collector.fetch()
-
-        if not raw_data["items"]:
-            pytest.skip("No items fetched, skipping HTML test")
-
-        transformed = collector.transform(raw_data, "papers")
-        item = transformed[0]
-
-        html = collector.generate_html(item)
-
-        assert isinstance(html, str), "HTML should be a string"
-        assert len(html) > 0, "HTML should not be empty"
-        assert item["title"] in html, "HTML should contain item title"
-        assert item["url"] in html, "HTML should contain item URL"
-        print(f"✓ Generated HTML ({len(html)} chars)")
 
 
 class TestRedditReal:
@@ -209,13 +132,11 @@ class TestAllCollectorsReal:
         """Create all collectors."""
         check_env_vars(
             "FOLO_COOKIE",
-            "HGPAPERS_FEED_ID",
             "REDDIT_LIST_ID",
             "XIAOHU_FEED_ID",
             "NEWS_AGGREGATOR_LIST_ID"
         )
         return [
-            HuggingFacePapersCollector(),
             RedditCollector(),
             XiaohuCollector(),
             NewsAggregatorCollector()
@@ -290,14 +211,14 @@ class TestErrorHandling:
         """Test behavior with invalid cookie."""
         import os
 
-        check_env_vars("HGPAPERS_FEED_ID")
+        check_env_vars("REDDIT_LIST_ID")
 
         # Temporarily override cookie
         original_cookie = os.environ.get("FOLO_COOKIE")
         os.environ["FOLO_COOKIE"] = "invalid_cookie_12345"
 
         try:
-            collector = HuggingFacePapersCollector()
+            collector = RedditCollector()
             raw_data = await collector.fetch()
 
             # Should return empty result gracefully
@@ -312,14 +233,14 @@ class TestErrorHandling:
                 os.environ["FOLO_COOKIE"] = original_cookie
 
     @pytest.mark.asyncio
-    async def test_invalid_feed_id(self):
-        """Test behavior with invalid feed ID."""
-        os.environ["HGPAPERS_FEED_ID"] = "invalid_feed_id_99999"
+    async def test_invalid_list_id(self):
+        """Test behavior with invalid list ID."""
+        os.environ["REDDIT_LIST_ID"] = "invalid_list_id_99999"
 
-        collector = HuggingFacePapersCollector()
+        collector = RedditCollector()
         raw_data = await collector.fetch()
 
         # Should handle gracefully
         assert raw_data is not None
         assert "items" in raw_data
-        print(f"⚠ Invalid feed ID test: {len(raw_data['items'])} items (expected 0)")
+        print(f"⚠ Invalid list ID test: {len(raw_data['items'])} items (expected 0)")

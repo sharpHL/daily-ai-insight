@@ -6,7 +6,6 @@ from unittest.mock import Mock, patch, AsyncMock
 import json
 
 from daily_ai_insight.collectors import (
-    HuggingFacePapersCollector,
     RedditCollector,
     XiaohuCollector,
     NewsAggregatorCollector
@@ -106,42 +105,6 @@ class TestFollowBaseCollector:
         }
 
     @pytest.mark.asyncio
-    async def test_huggingface_papers_fetch(self, mock_env, mock_api_response):
-        """Test HuggingFace Papers fetch."""
-        collector = HuggingFacePapersCollector()
-
-        # Create proper mock objects
-        class MockResponse:
-            status = 200
-
-            async def json(self):
-                return mock_api_response
-
-            async def __aenter__(self):
-                return self
-
-            async def __aexit__(self, *args):
-                return None
-
-        class MockSession:
-            def post(self, *args, **kwargs):
-                return MockResponse()
-
-            async def __aenter__(self):
-                return self
-
-            async def __aexit__(self, *args):
-                return None
-
-        with patch('aiohttp.ClientSession', return_value=MockSession()):
-            result = await collector.fetch()
-
-            assert result is not None
-            assert "items" in result
-            assert len(result["items"]) > 0
-            assert result["items"][0]["title"] == "Test Item 1"
-
-    @pytest.mark.asyncio
     async def test_reddit_fetch(self, mock_env, mock_api_response):
         """Test Reddit fetch."""
         collector = RedditCollector()
@@ -149,7 +112,7 @@ class TestFollowBaseCollector:
 
     def test_transform(self, mock_env):
         """Test data transformation."""
-        collector = HuggingFacePapersCollector()
+        collector = RedditCollector()
 
         raw_data = {
             "items": [
@@ -165,18 +128,18 @@ class TestFollowBaseCollector:
             ]
         }
 
-        result = collector.transform(raw_data, "papers")
+        result = collector.transform(raw_data, "reddit")
 
         assert len(result) == 1
         assert result[0]["id"] == "test_id"
         assert result[0]["title"] == "Test Title"
-        assert result[0]["type"] == "papers"
+        assert result[0]["type"] == "reddit"
         assert result[0]["authors"] == "Author 1"
         assert "content_html" in result[0]["details"]
 
     def test_generate_html(self, mock_env):
         """Test HTML generation."""
-        collector = HuggingFacePapersCollector()
+        collector = RedditCollector()
 
         item = {
             "title": "Test Title",
@@ -213,7 +176,6 @@ class TestCollectorIntegration:
     def test_all_collectors_instantiate(self, mock_env):
         """Test that all collectors can be instantiated."""
         collectors = [
-            HuggingFacePapersCollector(),
             RedditCollector(),
             XiaohuCollector(),
             NewsAggregatorCollector()
@@ -228,7 +190,7 @@ class TestCollectorIntegration:
     @pytest.mark.asyncio
     async def test_fetch_transform_pipeline(self, mock_env):
         """Test complete fetch -> transform pipeline."""
-        collector = HuggingFacePapersCollector()
+        collector = RedditCollector()
 
         # Mock fetch response
         mock_response = {
@@ -249,9 +211,9 @@ class TestCollectorIntegration:
 
         with patch.object(collector, 'fetch', return_value=mock_response):
             raw_data = await collector.fetch()
-            transformed = collector.transform(raw_data, "papers")
+            transformed = collector.transform(raw_data, "reddit")
             html = collector.generate_html(transformed[0])
 
             assert len(transformed) == 1
-            assert transformed[0]["type"] == "papers"
+            assert transformed[0]["type"] == "reddit"
             assert "Test Title" in html

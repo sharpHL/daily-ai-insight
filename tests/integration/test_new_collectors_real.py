@@ -279,7 +279,6 @@ class TestMixedOldAndNewCollectors:
         """Test that old and new collectors can run together."""
         import asyncio
         from daily_ai_insight.collectors import (
-            HuggingFacePapersCollector,
             RedditCollector,
         )
 
@@ -289,8 +288,6 @@ class TestMixedOldAndNewCollectors:
 
         # Add old collectors if configured
         if os.getenv("FOLO_COOKIE"):
-            if os.getenv("HGPAPERS_LIST_ID"):
-                collectors.append(HuggingFacePapersCollector())
             if os.getenv("REDDIT_LIST_ID"):
                 collectors.append(RedditCollector())
             if os.getenv("TWITTER_LIST_ID"):

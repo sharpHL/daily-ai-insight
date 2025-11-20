@@ -3,7 +3,6 @@
 from .base import BaseCollector
 from .follow_base import FollowBaseCollector
 from .folo_base import FOLOBaseCollector
-from .huggingface_papers import HuggingFacePapersCollector
 from .reddit import RedditCollector
 from .xiaohu import XiaohuCollector
 from .news_aggregator import NewsAggregatorCollector
@@ -21,7 +20,6 @@ __all__ = [
     "BaseCollector",
     "FollowBaseCollector",
     "FOLOBaseCollector",
-    "HuggingFacePapersCollector",
     "RedditCollector",
     "XiaohuCollector",
     "NewsAggregatorCollector",
