@@ -71,3 +71,6 @@ dmypy.json
 
 # uv
 .uv/
+
+# Temporary files
+tmp/
