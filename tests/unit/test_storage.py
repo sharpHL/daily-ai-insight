@@ -181,9 +181,12 @@ class TestFileStorage:
         assert Path(filepath).exists()
 
     @pytest.mark.asyncio
-    @patch("subprocess.run")
+    @patch("daily_ai_insight.storage.backends.file.subprocess.run")
     async def test_git_commit_enabled(self, mock_run):
         """Test Git commit when enabled."""
+        # Mock successful git commands
+        mock_run.return_value = Mock(returncode=0)
+
         with tempfile.TemporaryDirectory() as tmpdir:
             storage = FileStorage(base_path=tmpdir, git_sync=True)
             report = "# Test Report"
@@ -193,8 +196,8 @@ class TestFileStorage:
             # Verify git commands were called
             assert mock_run.call_count >= 2  # add + commit
             calls = [str(call) for call in mock_run.call_args_list]
-            assert any("git add" in str(call) for call in calls)
-            assert any("git commit" in str(call) for call in calls)
+            assert any("git" in str(call) and "add" in str(call) for call in calls)
+            assert any("git" in str(call) and "commit" in str(call) for call in calls)
 
 
 class TestKVStorage:
@@ -223,13 +226,30 @@ class TestKVStorage:
         "CF_API_TOKEN": "test_token"
     })
     @pytest.mark.asyncio
-    @patch("aiohttp.ClientSession")
-    async def test_kv_save_raw(self, mock_session):
+    @patch("daily_ai_insight.storage.backends.kv.aiohttp.ClientSession")
+    async def test_kv_save_raw(self, mock_session_cls):
         """Test saving raw data to KV."""
-        # Mock HTTP response
-        mock_response = AsyncMock()
+        # Create mock response
+        mock_response = Mock()
+        mock_response.status = 200
         mock_response.raise_for_status = Mock()
-        mock_session.return_value.__aenter__.return_value.put.return_value.__aenter__.return_value = mock_response
+
+        # Create async context manager for response
+        mock_resp_cm = AsyncMock()
+        mock_resp_cm.__aenter__ = AsyncMock(return_value=mock_response)
+        mock_resp_cm.__aexit__ = AsyncMock(return_value=None)
+
+        # Create mock session
+        mock_session = Mock()
+        mock_session.put = Mock(return_value=mock_resp_cm)
+
+        # Create async context manager for session
+        mock_session_cm = AsyncMock()
+        mock_session_cm.__aenter__ = AsyncMock(return_value=mock_session)
+        mock_session_cm.__aexit__ = AsyncMock(return_value=None)
+
+        # Set up ClientSession to return our mock
+        mock_session_cls.return_value = mock_session_cm
 
         kv = KVStorage()
         items = [{"test": 1}]
@@ -238,6 +258,9 @@ class TestKVStorage:
 
         assert "test-raw" in key
         assert datetime.now().strftime("%Y-%m-%d") in key
+
+        # Verify session.put was called
+        assert mock_session.put.called
 
     @patch.dict("os.environ", {
         "CF_ACCOUNT_ID": "test_account",

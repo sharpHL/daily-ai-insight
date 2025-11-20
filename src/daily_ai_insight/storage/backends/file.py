@@ -176,7 +176,13 @@ class FileStorage:
         """
         try:
             date_str = datetime.now().strftime("%Y-%m-%d")
-            rel_path = filepath.relative_to(Path.cwd())
+
+            # Try to get relative path, fall back to absolute
+            try:
+                rel_path = filepath.relative_to(Path.cwd())
+            except ValueError:
+                # Not in current directory, use absolute path
+                rel_path = filepath
 
             # Git add
             await asyncio.to_thread(
