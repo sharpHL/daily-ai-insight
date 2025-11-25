@@ -66,15 +66,22 @@ All Follow.is collectors use unified `FollowCollector` base class:
 - **新智元** - Chinese AI insights
 - **GitHub Trending** - Daily trending repos
 
+## Documentation
+
+- **[Migration Guide](docs/guides/MIGRATION_GUIDE.md)** - Migrating from old subclass pattern
+- **[Environment Variables](ENV_VARS.md)** - Complete configuration reference
+- **[Change Log](CHANGELOG.md)** - Version history
+- **[Refactoring Docs](docs/refactoring/)** - Technical details and architecture
+
 ## Development
 
 ```bash
 # Test collectors
-python quick_test.py           # Test all
-python quick_test.py papers    # Test specific
+python scripts/test_collectors_complete.py  # Complete validation
+python scripts/test_refactoring.py          # Refactoring validation
 
 # Run tests
-pytest tests/
+pytest tests/unit/ -v
 ```
 
 ## License
