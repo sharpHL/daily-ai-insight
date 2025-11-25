@@ -11,11 +11,7 @@ import pytest
 import os
 from typing import Dict, Any, List
 
-from daily_ai_insight.collectors import (
-    RedditCollector,
-    XiaohuCollector,
-    NewsAggregatorCollector
-)
+from daily_ai_insight.collectors import create_from_preset
 
 
 class TestRedditReal:
@@ -25,7 +21,7 @@ class TestRedditReal:
     def collector(self, check_env_vars):
         """Create collector with real credentials."""
         check_env_vars("FOLO_COOKIE", "REDDIT_LIST_ID")
-        return RedditCollector()
+        return create_from_preset("reddit")
 
     @pytest.mark.asyncio
     async def test_fetch_real_data(self, collector, is_real_test):
@@ -67,7 +63,7 @@ class TestXiaohuReal:
     def collector(self, check_env_vars):
         """Create collector with real credentials."""
         check_env_vars("FOLO_COOKIE", "XIAOHU_FEED_ID")
-        return XiaohuCollector()
+        return create_from_preset("xiaohu")
 
     @pytest.mark.asyncio
     async def test_fetch_real_data(self, collector, is_real_test):
@@ -110,7 +106,7 @@ class TestNewsAggregatorReal:
     def collector(self, check_env_vars):
         """Create collector with real credentials."""
         check_env_vars("FOLO_COOKIE", "NEWS_AGGREGATOR_LIST_ID")
-        return NewsAggregatorCollector()
+        return create_from_preset("news_aggregator")
 
     @pytest.mark.asyncio
     async def test_fetch_real_data(self, collector, is_real_test):
@@ -137,9 +133,9 @@ class TestAllCollectorsReal:
             "NEWS_AGGREGATOR_LIST_ID"
         )
         return [
-            RedditCollector(),
-            XiaohuCollector(),
-            NewsAggregatorCollector()
+            create_from_preset("reddit"),
+            create_from_preset("xiaohu"),
+            create_from_preset("news_aggregator")
         ]
 
     @pytest.mark.asyncio
@@ -218,7 +214,7 @@ class TestErrorHandling:
         os.environ["FOLO_COOKIE"] = "invalid_cookie_12345"
 
         try:
-            collector = RedditCollector()
+            collector = create_from_preset("reddit")
             raw_data = await collector.fetch()
 
             # Should return empty result gracefully
@@ -237,7 +233,7 @@ class TestErrorHandling:
         """Test behavior with invalid list ID."""
         os.environ["REDDIT_LIST_ID"] = "invalid_list_id_99999"
 
-        collector = RedditCollector()
+        collector = create_from_preset("reddit")
         raw_data = await collector.fetch()
 
         # Should handle gracefully

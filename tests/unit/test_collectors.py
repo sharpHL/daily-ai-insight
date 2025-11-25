@@ -5,11 +5,7 @@ from datetime import datetime, timedelta
 from unittest.mock import Mock, patch, AsyncMock
 import json
 
-from daily_ai_insight.collectors import (
-    RedditCollector,
-    XiaohuCollector,
-    NewsAggregatorCollector
-)
+from daily_ai_insight.collectors import create_from_preset
 from daily_ai_insight.collectors.utils import (
     get_random_user_agent,
     is_date_within_last_days,
@@ -107,12 +103,12 @@ class TestFollowBaseCollector:
     @pytest.mark.asyncio
     async def test_reddit_fetch(self, mock_env, mock_api_response):
         """Test Reddit fetch."""
-        collector = RedditCollector()
+        collector = create_from_preset("reddit")
         assert collector.list_id == "test_list_id"
 
     def test_transform(self, mock_env):
         """Test data transformation."""
-        collector = RedditCollector()
+        collector = create_from_preset("reddit")
 
         raw_data = {
             "items": [
@@ -139,7 +135,7 @@ class TestFollowBaseCollector:
 
     def test_generate_html(self, mock_env):
         """Test HTML generation."""
-        collector = RedditCollector()
+        collector = create_from_preset("reddit")
 
         item = {
             "title": "Test Title",
@@ -176,9 +172,9 @@ class TestCollectorIntegration:
     def test_all_collectors_instantiate(self, mock_env):
         """Test that all collectors can be instantiated."""
         collectors = [
-            RedditCollector(),
-            XiaohuCollector(),
-            NewsAggregatorCollector()
+            create_from_preset("reddit"),
+            create_from_preset("xiaohu"),
+            create_from_preset("news_aggregator")
         ]
 
         for collector in collectors:
@@ -190,7 +186,7 @@ class TestCollectorIntegration:
     @pytest.mark.asyncio
     async def test_fetch_transform_pipeline(self, mock_env):
         """Test complete fetch -> transform pipeline."""
-        collector = RedditCollector()
+        collector = create_from_preset("reddit")
 
         # Mock fetch response
         mock_response = {

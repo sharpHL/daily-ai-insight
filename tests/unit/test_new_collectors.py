@@ -7,12 +7,7 @@ import json
 
 from daily_ai_insight.collectors import (
     GitHubTrendingCollector,
-    PapersCollector,
-    TwitterCollector,
-    AIBaseCollector,
-    JiqizhixinCollector,
-    QBitCollector,
-    XinZhiYuanCollector,
+    create_from_preset,
 )
 
 
@@ -120,21 +115,21 @@ class TestFOLOBaseCollectors:
 
     def test_papers_collector_init(self, mock_env):
         """Test Papers collector initialization."""
-        collector = PapersCollector()
+        collector = create_from_preset("papers")
         assert collector.list_id == "test_papers_list"
         assert collector.name == "papers"
         assert collector.source_name == "Academic Papers"
 
     def test_twitter_collector_init(self, mock_env):
         """Test Twitter collector initialization."""
-        collector = TwitterCollector()
+        collector = create_from_preset("twitter")
         assert collector.list_id == "test_twitter_list"
         assert collector.name == "twitter"
         assert collector.source_name == "Twitter/X"
 
     def test_aibase_collector_init(self, mock_env):
         """Test AI Base collector initialization."""
-        collector = AIBaseCollector()
+        collector = create_from_preset("aibase")
         assert collector.feed_id == "test_aibase_feed"
         assert collector.name == "aibase"
         assert collector.source_name == "AI Base"
@@ -142,28 +137,28 @@ class TestFOLOBaseCollectors:
 
     def test_jiqizhixin_collector_init(self, mock_env):
         """Test Jiqizhixin collector initialization."""
-        collector = JiqizhixinCollector()
+        collector = create_from_preset("jiqizhixin")
         assert collector.feed_id == "test_jiqizhixin_feed"
         assert collector.name == "jiqizhixin"
         assert collector.source_name == "机器之心"
 
     def test_qbit_collector_init(self, mock_env):
         """Test QBit collector initialization."""
-        collector = QBitCollector()
+        collector = create_from_preset("qbit")
         assert collector.feed_id == "test_qbit_feed"
         assert collector.name == "qbit"
         assert collector.source_name == "量子位"
 
     def test_xinzhiyuan_collector_init(self, mock_env):
         """Test XinZhiYuan collector initialization."""
-        collector = XinZhiYuanCollector()
+        collector = create_from_preset("xinzhiyuan")
         assert collector.feed_id == "test_xinzhiyuan_feed"
         assert collector.name == "xinzhiyuan"
         assert collector.source_name == "新智元"
 
     def test_transform_item(self, mock_env, mock_folo_response):
         """Test FOLO item transformation."""
-        collector = PapersCollector()
+        collector = create_from_preset("papers")
         entry = mock_folo_response["data"][0]
         feed = entry["feeds"]
 
@@ -179,7 +174,7 @@ class TestFOLOBaseCollectors:
     @pytest.mark.asyncio
     async def test_twitter_transform_with_author(self, mock_env):
         """Test Twitter collector handles author names correctly."""
-        collector = TwitterCollector()
+        collector = create_from_preset("twitter")
 
         entry = {
             "entries": {
@@ -222,12 +217,12 @@ class TestAllNewCollectors:
         """Test that all new collectors can be instantiated."""
         collectors = [
             GitHubTrendingCollector(),
-            PapersCollector(),
-            TwitterCollector(),
-            AIBaseCollector(),
-            JiqizhixinCollector(),
-            QBitCollector(),
-            XinZhiYuanCollector(),
+            create_from_preset("papers"),
+            create_from_preset("twitter"),
+            create_from_preset("aibase"),
+            create_from_preset("jiqizhixin"),
+            create_from_preset("qbit"),
+            create_from_preset("xinzhiyuan"),
         ]
 
         for collector in collectors:
@@ -240,8 +235,8 @@ class TestAllNewCollectors:
         """Test that FOLO collectors use correct ID type."""
         # List-based collectors
         list_collectors = [
-            PapersCollector(),
-            TwitterCollector(),
+            create_from_preset("papers"),
+            create_from_preset("twitter"),
         ]
 
         for collector in list_collectors:
@@ -251,10 +246,10 @@ class TestAllNewCollectors:
 
         # Feed-based collectors
         feed_collectors = [
-            AIBaseCollector(),
-            JiqizhixinCollector(),
-            QBitCollector(),
-            XinZhiYuanCollector(),
+            create_from_preset("aibase"),
+            create_from_preset("jiqizhixin"),
+            create_from_preset("qbit"),
+            create_from_preset("xinzhiyuan"),
         ]
 
         for collector in feed_collectors:
@@ -278,7 +273,7 @@ class TestEdgeCases:
     def test_missing_feed_id_handling(self, mock_env):
         """Test collector behavior when feed/list ID is missing."""
         # Don't set any IDs
-        collector = PapersCollector()
+        collector = create_from_preset("papers")
 
         # Should initialize with empty ID
         assert collector.list_id == ""
@@ -288,7 +283,7 @@ class TestEdgeCases:
 
     def test_strip_html_in_transform(self, mock_env):
         """Test that HTML is stripped during transformation."""
-        collector = PapersCollector()
+        collector = create_from_preset("papers")
 
         entry = {
             "entries": {

@@ -3,7 +3,7 @@
 import re
 import asyncio
 import random
-from datetime import datetime, timedelta
+from datetime import datetime, timedelta, timezone
 from typing import Optional
 from bs4 import BeautifulSoup
 import html
@@ -64,7 +64,13 @@ def is_date_within_last_days(
             else:
                 date = datetime.strptime(date_str, "%Y-%m-%d")
 
-        cutoff = datetime.now() - timedelta(days=days)
+        # Use timezone-aware cutoff to match API datetime format
+        cutoff = datetime.now(timezone.utc) - timedelta(days=days)
+
+        # Ensure both are timezone-aware for comparison
+        if date.tzinfo is None:
+            date = date.replace(tzinfo=timezone.utc)
+
         return date >= cutoff
     except (ValueError, TypeError):
         return False
