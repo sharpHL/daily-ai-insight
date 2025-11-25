@@ -77,8 +77,7 @@ All Follow.is collectors use unified `FollowCollector` base class:
 
 ```bash
 # Test collectors
-python scripts/test_collectors_complete.py  # Complete validation
-python scripts/test_refactoring.py          # Refactoring validation
+python scripts/test_collectors_complete.py  # Validate all collectors
 
 # Run tests
 pytest tests/unit/ -v
