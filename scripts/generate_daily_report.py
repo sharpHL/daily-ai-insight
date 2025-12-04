@@ -573,22 +573,22 @@ def generate_html_report(
 
         html += '    </div>\n'
 
-    # Get GitHub repo info from environment or use placeholder
-    github_repo = os.getenv("GITHUB_REPOSITORY", "sharpHL/daily-ai-insight")
+    # Get feedback API URL from environment
+    feedback_api = os.getenv("FEEDBACK_API_URL", "")
 
     html += f'''
     <div class="export-section">
         <h3>📤 保存反馈</h3>
         <p style="color: var(--text-dim); margin-bottom: 15px;">
-            点击下方按钮将反馈保存到 GitHub（需要登录）
+            反馈会自动保存，用于优化下次日报推荐
         </p>
-        <button onclick="saveToGitHub()" id="save-btn">💾 保存到 GitHub</button>
+        <button onclick="saveFeedback()" id="save-btn">💾 保存反馈</button>
         <button onclick="clearFeedback()">🗑️ 清除反馈</button>
         <div id="feedback-status" style="margin-top: 15px; display: none;"></div>
     </div>
 
     <script>
-        const GITHUB_REPO = "{github_repo}";
+        const FEEDBACK_API = "{feedback_api}";
         const REPORT_DATE = "{date_str}";
         const feedbackData = {{}};
 
@@ -618,51 +618,45 @@ def generate_html_report(
         function updateSaveButton() {{
             const count = Object.keys(feedbackData).length;
             const btn = document.getElementById('save-btn');
-            btn.textContent = count > 0 ? `💾 保存到 GitHub (${{count}} 条)` : '💾 保存到 GitHub';
+            btn.textContent = count > 0 ? `💾 保存反馈 (${{count}} 条)` : '💾 保存反馈';
         }}
 
-        async function saveToGitHub() {{
+        async function saveFeedback() {{
             const items = Object.values(feedbackData);
             if (items.length === 0) {{
                 showStatus('没有反馈数据', 'warning');
                 return;
             }}
 
-            // Create issue body
-            const liked = items.filter(i => i.action === 'want_more');
-            const disliked = items.filter(i => i.action === 'not_interested');
-
-            let body = `## 日报反馈 - ${{REPORT_DATE}}\\n\\n`;
-
-            if (liked.length > 0) {{
-                body += `### 👍 想看更多 (${{liked.length}})\\n`;
-                liked.forEach(item => {{
-                    body += `- ${{item.title}}\\n`;
-                }});
-                body += `\\n`;
+            // If no API configured, show local save message
+            if (!FEEDBACK_API) {{
+                showStatus('✅ 已保存到本地（下次访问时恢复）', 'success');
+                return;
             }}
 
-            if (disliked.length > 0) {{
-                body += `### 👎 不感兴趣 (${{disliked.length}})\\n`;
-                disliked.forEach(item => {{
-                    body += `- ${{item.title}}\\n`;
+            showStatus('正在保存...', 'info');
+
+            try {{
+                const response = await fetch(FEEDBACK_API + '/feedback', {{
+                    method: 'POST',
+                    headers: {{ 'Content-Type': 'application/json' }},
+                    body: JSON.stringify({{
+                        date: REPORT_DATE,
+                        items: items
+                    }})
                 }});
+
+                const result = await response.json();
+
+                if (result.success) {{
+                    showStatus(`✅ 已保存 ${{result.count}} 条反馈`, 'success');
+                }} else {{
+                    throw new Error(result.error || 'Unknown error');
+                }}
+            }} catch (error) {{
+                console.error('Save feedback error:', error);
+                showStatus('保存失败，已存到本地: ' + error.message, 'warning');
             }}
-
-            body += `\\n---\\n_自动提交于 ${{new Date().toISOString()}}_`;
-
-            // Open GitHub issue creation page
-            const title = encodeURIComponent(`[Feedback] ${{REPORT_DATE}} 日报反馈`);
-            const bodyEncoded = encodeURIComponent(body);
-            const labels = encodeURIComponent('feedback');
-
-            const url = `https://github.com/${{GITHUB_REPO}}/issues/new?title=${{title}}&body=${{bodyEncoded}}&labels=${{labels}}`;
-
-            showStatus('正在打开 GitHub...', 'info');
-            window.open(url, '_blank');
-
-            // Also save locally
-            showStatus('✅ 已打开 GitHub Issue 页面，请点击提交', 'success');
         }}
 
         function showStatus(message, type) {{

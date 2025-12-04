@@ -41,10 +41,10 @@ jobs:
         run: |
           uv venv
           uv pip install -e .
-          uv pip install pyyaml
+          uv pip install pyyaml aiohttp
 
       - name: Create configs directory
-        run: mkdir -p configs
+        run: mkdir -p configs docs
 
       - name: Setup profile config
         run: |
@@ -52,23 +52,30 @@ jobs:
             cp configs/profile.yaml.example configs/profile.yaml 2>/dev/null || echo "Using default profile"
           fi
 
+      - name: Sync feedback from Cloudflare KV
+        env:
+          FEEDBACK_API_URL: ${{ secrets.FEEDBACK_API_URL }}
+        run: |
+          source .venv/bin/activate
+          python scripts/sync_feedback.py || echo "Feedback sync skipped (API not configured)"
+
       - name: Fetch Folo data and generate report
         env:
           FOLO_COOKIE: ${{ secrets.FOLO_COOKIE }}
           GEMINI_API_KEY: ${{ secrets.GEMINI_API_KEY }}
-          FOLO_FILTER_DAYS: ${{ github.event.inputs.days || '3' }}
+          FEEDBACK_API_URL: ${{ secrets.FEEDBACK_API_URL }}
+          FOLO_LIST_ID: ${{ secrets.FOLO_LIST_ID || '216345814850997248' }}
         run: |
           source .venv/bin/activate
 
           # Fetch data from Folo
           python scripts/fetch_folo_list.py
 
-          # Generate HTML report
+          # Generate HTML report (with feedback API URL embedded)
           python scripts/generate_daily_report.py folo_digest.md --html
 
           # Move to docs folder for GitHub Pages
-          mkdir -p docs
-          cp ai_daily_*.html docs/
+          cp ai_daily_*.html docs/ 2>/dev/null || true
 
           # Generate index page
           python scripts/generate_index.py
@@ -85,10 +92,12 @@ jobs:
         id: deployment
         uses: actions/deploy-pages@v4
 
-      - name: Commit feedback data (if any)
+      - name: Commit updated files
         run: |
           git config --local user.email "github-actions[bot]@users.noreply.github.com"
           git config --local user.name "github-actions[bot]"
           git add configs/feedback.yaml docs/ || true
-          git diff --staged --quiet || git commit -m "chore: update daily report $(date +%Y-%m-%d)"
+          git diff --staged --quiet || git commit -m "chore: update daily report $(date +%Y-%m-%d)
+
+          🤖 Generated with [Claude Code](https://claude.com/claude-code)"
           git push || true
