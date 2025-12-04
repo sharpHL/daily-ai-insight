@@ -1,0 +1,10 @@
+name = "ai-daily-feedback"
+main = "worker.js"
+compatibility_date = "2024-01-01"
+
+# KV namespace binding
+# Run: wrangler kv:namespace create "FEEDBACK"
+# Then add the id below
+[[kv_namespaces]]
+binding = "FEEDBACK"
+id = "05d9c4fe172f462dbc362c713ee36248"
