@@ -25,7 +25,7 @@ load_dotenv()
 # Configuration
 LIST_ID = "216345814850997248"
 FOLO_API = "https://api.follow.is/entries"
-FILTER_DAYS = 15  # Look back 15 days (half month)
+FILTER_DAYS = int(os.getenv("FOLO_FILTER_DAYS", "3"))  # Default 3 days
 
 # User profile for filtering
 USER_PROFILE = {
@@ -133,7 +133,7 @@ async def fetch_list_content() -> list[dict[str, Any]]:
     print(f"Fetching content from list {LIST_ID}...")
 
     async with aiohttp.ClientSession() as session:
-        for page in range(15):  # Fetch up to 15 pages for half month data
+        for page in range(max(5, FILTER_DAYS * 2)):  # Fetch enough pages based on days
             body = {
                 "view": 1,
                 "withContent": True,
