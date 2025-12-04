@@ -1,0 +1,94 @@
+name: Daily AI Report
+
+on:
+  # 每天北京时间早上 8 点运行 (UTC 0:00)
+  schedule:
+    - cron: '0 0 * * *'
+  # 手动触发
+  workflow_dispatch:
+    inputs:
+      days:
+        description: 'Days to look back'
+        required: false
+        default: '3'
+
+permissions:
+  contents: write
+  pages: write
+  id-token: write
+
+concurrency:
+  group: "pages"
+  cancel-in-progress: false
+
+jobs:
+  generate-report:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Setup Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+
+      - name: Install uv
+        uses: astral-sh/setup-uv@v4
+
+      - name: Install dependencies
+        run: |
+          uv venv
+          uv pip install -e .
+          uv pip install pyyaml
+
+      - name: Create configs directory
+        run: mkdir -p configs
+
+      - name: Setup profile config
+        run: |
+          if [ ! -f configs/profile.yaml ]; then
+            cp configs/profile.yaml.example configs/profile.yaml 2>/dev/null || echo "Using default profile"
+          fi
+
+      - name: Fetch Folo data and generate report
+        env:
+          FOLO_COOKIE: ${{ secrets.FOLO_COOKIE }}
+          GEMINI_API_KEY: ${{ secrets.GEMINI_API_KEY }}
+          FOLO_FILTER_DAYS: ${{ github.event.inputs.days || '3' }}
+        run: |
+          source .venv/bin/activate
+
+          # Fetch data from Folo
+          python scripts/fetch_folo_list.py
+
+          # Generate HTML report
+          python scripts/generate_daily_report.py folo_digest.md --html
+
+          # Move to docs folder for GitHub Pages
+          mkdir -p docs
+          cp ai_daily_*.html docs/
+
+          # Generate index page
+          python scripts/generate_index.py
+
+      - name: Setup Pages
+        uses: actions/configure-pages@v4
+
+      - name: Upload artifact
+        uses: actions/upload-pages-artifact@v3
+        with:
+          path: 'docs'
+
+      - name: Deploy to GitHub Pages
+        id: deployment
+        uses: actions/deploy-pages@v4
+
+      - name: Commit feedback data (if any)
+        run: |
+          git config --local user.email "github-actions[bot]@users.noreply.github.com"
+          git config --local user.name "github-actions[bot]"
+          git add configs/feedback.yaml docs/ || true
+          git diff --staged --quiet || git commit -m "chore: update daily report $(date +%Y-%m-%d)"
+          git push || true

@@ -15,18 +15,8 @@ from rich.logging import RichHandler
 
 # Import modules
 from daily_ai_insight.collectors import (
-    # Original collectors
-    RedditCollector,
-    XiaohuCollector,
-    NewsAggregatorCollector,
-    # New collectors
     GitHubTrendingCollector,
-    PapersCollector,
-    TwitterCollector,
-    AIBaseCollector,
-    JiqizhixinCollector,
-    QBitCollector,
-    XinZhiYuanCollector,
+    create_from_preset,
 )
 from daily_ai_insight.processors import DataCleaner, Deduplicator
 from daily_ai_insight.storage import create_storage
@@ -129,20 +119,23 @@ class DailyInsightPipeline:
         """Collect data from sources."""
         all_items = []
 
-        # Initialize collectors
+        # Initialize collectors using factory functions
         collectors = [
-            # Original collectors
-            RedditCollector(),
-            XiaohuCollector(),
-            NewsAggregatorCollector(),
-            # New collectors
+            # Social platforms
+            create_from_preset("reddit"),
+            create_from_preset("twitter"),
+            # Academic papers
+            create_from_preset("papers"),
+            # Chinese AI news sites
+            create_from_preset("xiaohu"),
+            create_from_preset("aibase"),
+            create_from_preset("jiqizhixin"),
+            create_from_preset("qbit"),
+            create_from_preset("xinzhiyuan"),
+            # News aggregators
+            create_from_preset("news_aggregator"),
+            # Specialized collectors
             GitHubTrendingCollector(),
-            PapersCollector(),
-            TwitterCollector(),
-            AIBaseCollector(),
-            JiqizhixinCollector(),
-            QBitCollector(),
-            XinZhiYuanCollector(),
         ]
 
         with Progress(

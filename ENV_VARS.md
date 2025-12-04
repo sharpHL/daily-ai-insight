@@ -1,194 +1,71 @@
-# Environment Variables - Complete Reference
+# Environment Variables
 
-## FOLO Configuration (Required for most collectors)
+Copy `.env.example` and configure your API keys:
+
+## Follow.is Data Sources
 
 ```env
-# FOLO Cookie (get from browser DevTools)
-FOLO_COOKIE=your_cookie_here
+# Authentication (Required)
+FOLO_COOKIE=your_cookie           # From browser DevTools (F12 → Network)
+FOLO_DATA_API=https://api.follow.is/entries
+FOLO_FILTER_DAYS=3                # Days to filter
 
-# FOLO API URL (usually don't need to change)
-FOLO_DATA_API=https://api.follow.is/wallets/transactions
+# List IDs (get from Follow.is URLs)
+PAPERS_LIST_ID=your_list_id       # Academic papers
+TWITTER_LIST_ID=your_list_id      # Twitter posts
+REDDIT_LIST_ID=your_list_id       # Reddit posts
+NEWS_AGGREGATOR_LIST_ID=your_id   # News aggregator
 
-# Days to filter (default: 3)
-FOLO_FILTER_DAYS=3
+# Feed IDs
+AIBASE_FEED_ID=your_feed_id       # AI Base news
+JIQIZHIXIN_FEED_ID=your_feed_id   # 机器之心
+QBIT_FEED_ID=your_feed_id         # 量子位
+XINZHIYUAN_FEED_ID=your_feed_id   # 新智元
+XIAOHU_FEED_ID=your_feed_id       # Xiaohu AI
 ```
 
-## Data Source IDs
-
-### FOLO List IDs (listId-based sources)
+## Other Data Sources
 
 ```env
-# Reddit
-REDDIT_LIST_ID=your_list_id
-
-# Twitter/X
-TWITTER_LIST_ID=your_list_id
-
-# Generic Papers (ArXiv, etc.)
-PAPERS_LIST_ID=your_list_id
-
-# Xiaohu AI
-XIAOHU_LIST_ID=your_list_id
-
-# HuggingFace Papers
-HGPAPERS_LIST_ID=your_list_id
-```
-
-### FOLO Feed IDs (feedId-based sources)
-
-```env
-# AI Base
-AIBASE_FEED_ID=your_feed_id
-
-# Jiqizhixin (机器之心)
-JIQIZHIXIN_FEED_ID=your_feed_id
-
-# QBit (量子位)
-QBIT_FEED_ID=your_feed_id
-
-# XinZhiYuan (新智元)
-XINZHIYUAN_FEED_ID=your_feed_id
-```
-
-### Fetch Pages Configuration
-
-```env
-# Number of pages to fetch for each source (default: 3)
-REDDIT_FETCH_PAGES=3
-TWITTER_FETCH_PAGES=3
-PAPERS_FETCH_PAGES=3
-XIAOHU_FETCH_PAGES=3
-HGPAPERS_FETCH_PAGES=3
-AIBASE_FETCH_PAGES=3
-JIQIZHIXIN_FETCH_PAGES=3
-QBIT_FETCH_PAGES=3
-XINZHIYUAN_FETCH_PAGES=3
-```
-
-## Direct API Sources
-
-### GitHub Trending
-
-```env
-# GitHub Trending API (default: https://gh-trending-api.com/repositories)
+# GitHub Trending
 GITHUB_TRENDING_API=https://gh-trending-api.com/repositories
-
-# Optional: filter by language
-GITHUB_TRENDING_LANGUAGE=python
-
-# Enable translation of descriptions to Chinese
-TRANSLATE_ENABLED=false
-```
-
-### News Aggregator
-
-```env
-# Comma-separated list of RSS feed URLs
-NEWS_AGGREGATOR_FEEDS=https://example.com/feed1.xml,https://example.com/feed2.xml
+GITHUB_TRENDING_LANGUAGE=python   # Optional filter
 ```
 
 ## LLM Providers
 
-### Gemini (Google)
-
 ```env
-GEMINI_API_KEY=your_api_key_here
+# Gemini (default)
+GEMINI_API_KEY=your_key
 GEMINI_MODEL=gemini-pro
-```
 
-### OpenAI
-
-```env
-OPENAI_API_KEY=your_api_key_here
+# OpenAI (optional)
+OPENAI_API_KEY=your_key
 OPENAI_MODEL=gpt-4
-```
 
-### Provider Selection
-
-```env
-# Which LLM provider to use: 'gemini' or 'openai'
-LLM_PROVIDER=gemini
+LLM_PROVIDER=gemini               # gemini or openai
 ```
 
 ## Output Channels
 
-### Feishu (Lark)
-
 ```env
+# Feishu
 FEISHU_WEBHOOK=https://open.feishu.cn/open-apis/bot/v2/hook/...
-```
 
-### Telegram
-
-```env
+# Telegram
 TELEGRAM_BOT_TOKEN=123456:ABC-DEF...
 TELEGRAM_CHAT_ID=your_chat_id
 ```
 
-## Optional Features
+## Quick Setup Guide
 
-### GitHub Integration (for archiving reports)
-
-```env
-GITHUB_TOKEN=ghp_your_personal_access_token
-GITHUB_REPO=username/repo-name
-GITHUB_BRANCH=main
-```
-
----
-
-## Quick Setup
-
-### 1. Minimal Configuration (Core Features)
-
-```env
-# FOLO
-FOLO_COOKIE=your_cookie
-
-# At least one LLM provider
-GEMINI_API_KEY=your_key
-
-# At least one output channel
-FEISHU_WEBHOOK=your_webhook
-```
-
-### 2. Full Configuration (All Features)
-
-See sections above for complete list of all available variables.
-
----
-
-## How to Get FOLO Cookie
-
+### Get Follow.is Cookie
 1. Login to [app.follow.is](https://app.follow.is)
-2. Open browser DevTools (F12)
-3. Go to Network tab
-4. Refresh the page
-5. Find any request to `api.follow.is`
-6. Copy the entire `Cookie` header value
+2. Open DevTools (F12) → Network tab
+3. Refresh page, find any `api.follow.is` request
+4. Copy the `Cookie` header value
 
-## How to Get FOLO List/Feed IDs
-
-1. Go to [app.follow.is](https://app.follow.is)
-2. Navigate to your List or Feed
-3. Check the URL: `https://app.follow.is/list/[LIST_ID]` or `https://app.follow.is/feed/[FEED_ID]`
-4. Copy the ID from the URL
-
----
-
-## Collector Mapping
-
-| Collector | Environment Variable | Type |
-|-----------|---------------------|------|
-| GitHubTrendingCollector | GITHUB_TRENDING_API | Direct API |
-| PapersCollector | PAPERS_LIST_ID | FOLO List |
-| TwitterCollector | TWITTER_LIST_ID | FOLO List |
-| RedditCollector | REDDIT_LIST_ID | FOLO List |
-| XiaohuCollector | XIAOHU_LIST_ID | FOLO List |
-| HuggingFacePapersCollector | HGPAPERS_LIST_ID | FOLO List |
-| AIBaseCollector | AIBASE_FEED_ID | FOLO Feed |
-| JiqizhixinCollector | JIQIZHIXIN_FEED_ID | FOLO Feed |
-| QBitCollector | QBIT_FEED_ID | FOLO Feed |
-| XinZhiYuanCollector | XINZHIYUAN_FEED_ID | FOLO Feed |
-| NewsAggregatorCollector | NEWS_AGGREGATOR_FEEDS | Direct RSS |
-
+### Get List/Feed IDs
+1. Navigate to your list/feed on Follow.is
+2. Check URL: `app.follow.is/list/[ID]` or `app.follow.is/feed/[ID]`
+3. Copy the ID from URL

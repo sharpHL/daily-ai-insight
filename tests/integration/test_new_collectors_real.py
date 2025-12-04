@@ -12,12 +12,7 @@ from typing import List
 
 from daily_ai_insight.collectors import (
     GitHubTrendingCollector,
-    PapersCollector,
-    TwitterCollector,
-    AIBaseCollector,
-    JiqizhixinCollector,
-    QBitCollector,
-    XinZhiYuanCollector,
+    create_from_preset,
 )
 
 
@@ -85,7 +80,7 @@ class TestPapersCollectorReal:
     def collector(self, check_env_vars):
         """Create collector with real credentials."""
         check_env_vars("FOLO_COOKIE", "PAPERS_LIST_ID")
-        return PapersCollector()
+        return create_from_preset("papers")
 
     @pytest.mark.asyncio
     async def test_fetch_real_data(self, collector, is_real_test):
@@ -110,7 +105,7 @@ class TestTwitterCollectorReal:
     def collector(self, check_env_vars):
         """Create collector with real credentials."""
         check_env_vars("FOLO_COOKIE", "TWITTER_LIST_ID")
-        return TwitterCollector()
+        return create_from_preset("twitter")
 
     @pytest.mark.asyncio
     async def test_fetch_real_data(self, collector, is_real_test):
@@ -138,25 +133,25 @@ class TestChineseTechMediaReal:
     def aibase(self, check_env_vars):
         """Create AI Base collector."""
         check_env_vars("FOLO_COOKIE", "AIBASE_FEED_ID")
-        return AIBaseCollector()
+        return create_from_preset("aibase")
 
     @pytest.fixture
     def jiqizhixin(self, check_env_vars):
         """Create Jiqizhixin collector."""
         check_env_vars("FOLO_COOKIE", "JIQIZHIXIN_FEED_ID")
-        return JiqizhixinCollector()
+        return create_from_preset("jiqizhixin")
 
     @pytest.fixture
     def qbit(self, check_env_vars):
         """Create QBit collector."""
         check_env_vars("FOLO_COOKIE", "QBIT_FEED_ID")
-        return QBitCollector()
+        return create_from_preset("qbit")
 
     @pytest.fixture
     def xinzhiyuan(self, check_env_vars):
         """Create XinZhiYuan collector."""
         check_env_vars("FOLO_COOKIE", "XINZHIYUAN_FEED_ID")
-        return XinZhiYuanCollector()
+        return create_from_preset("xinzhiyuan")
 
     @pytest.mark.asyncio
     async def test_aibase_fetch(self, aibase, is_real_test):
@@ -202,17 +197,17 @@ class TestAllNewCollectorsReal:
         # Add FOLO collectors if configured
         if os.getenv("FOLO_COOKIE"):
             if os.getenv("PAPERS_LIST_ID"):
-                collectors.append(PapersCollector())
+                collectors.append(create_from_preset("papers"))
             if os.getenv("TWITTER_LIST_ID"):
-                collectors.append(TwitterCollector())
+                collectors.append(create_from_preset("twitter"))
             if os.getenv("AIBASE_FEED_ID"):
-                collectors.append(AIBaseCollector())
+                collectors.append(create_from_preset("aibase"))
             if os.getenv("JIQIZHIXIN_FEED_ID"):
-                collectors.append(JiqizhixinCollector())
+                collectors.append(create_from_preset("jiqizhixin"))
             if os.getenv("QBIT_FEED_ID"):
-                collectors.append(QBitCollector())
+                collectors.append(create_from_preset("qbit"))
             if os.getenv("XINZHIYUAN_FEED_ID"):
-                collectors.append(XinZhiYuanCollector())
+                collectors.append(create_from_preset("xinzhiyuan"))
 
         return collectors
 
@@ -291,7 +286,7 @@ class TestMixedOldAndNewCollectors:
             if os.getenv("REDDIT_LIST_ID"):
                 collectors.append(RedditCollector())
             if os.getenv("TWITTER_LIST_ID"):
-                collectors.append(TwitterCollector())
+                collectors.append(create_from_preset("twitter"))
 
         if len(collectors) == 1:
             pytest.skip("Only GitHub Trending configured, need more for this test")

@@ -1,34 +1,31 @@
 """Data collectors for various sources."""
 
-from .base import BaseCollector
-from .follow_base import FollowBaseCollector
-from .folo_base import FOLOBaseCollector
-from .reddit import RedditCollector
-from .xiaohu import XiaohuCollector
-from .news_aggregator import NewsAggregatorCollector
-
-# New collectors
+from .base import BaseCollector, FollowCollector
 from .github_trending import GitHubTrendingCollector
-from .papers import PapersCollector
-from .twitter import TwitterCollector
-from .aibase import AIBaseCollector
-from .jiqizhixin import JiqizhixinCollector
-from .qbit import QBitCollector
-from .xinzhiyuan import XinZhiYuanCollector
+
+# Factory functions (recommended approach)
+from . import factory
+from .factory import (
+    create_twitter_collector,
+    create_reddit_collector,
+    create_papers_collector,
+    create_mixed_collector,
+    create_collector,
+    create_from_preset,
+)
 
 __all__ = [
+    # Base classes
     "BaseCollector",
-    "FollowBaseCollector",
-    "FOLOBaseCollector",
-    "RedditCollector",
-    "XiaohuCollector",
-    "NewsAggregatorCollector",
-    # New collectors
+    "FollowCollector",
+    # Specialized collectors
     "GitHubTrendingCollector",
-    "PapersCollector",
-    "TwitterCollector",
-    "AIBaseCollector",
-    "JiqizhixinCollector",
-    "QBitCollector",
-    "XinZhiYuanCollector",
+    # Factory module and functions (recommended)
+    "factory",
+    "create_twitter_collector",
+    "create_reddit_collector",
+    "create_papers_collector",
+    "create_mixed_collector",
+    "create_collector",
+    "create_from_preset",
 ]

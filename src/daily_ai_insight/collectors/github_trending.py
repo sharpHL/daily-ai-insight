@@ -17,6 +17,7 @@ class GitHubTrendingCollector(BaseCollector):
     """Collect trending repositories from GitHub"""
 
     def __init__(self):
+        super().__init__("github_trending")
         self.api_url = os.getenv(
             'GITHUB_TRENDING_API',
             'https://gh-trending-api.com/repositories'

@@ -1,0 +1,830 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AI 日报 - 2025-11-26</title>
+    <style>
+        :root {
+            --bg: #1a1a2e;
+            --card-bg: #16213e;
+            --text: #eee;
+            --text-dim: #888;
+            --accent: #e94560;
+            --accent-green: #00d26a;
+            --accent-yellow: #ffc107;
+            --accent-blue: #0f3460;
+        }
+        * { box-sizing: border-box; margin: 0; padding: 0; }
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            background: var(--bg);
+            color: var(--text);
+            line-height: 1.6;
+            padding: 20px;
+            max-width: 900px;
+            margin: 0 auto;
+        }
+        h1 { color: var(--accent); margin-bottom: 10px; }
+        .stats {
+            color: var(--text-dim);
+            margin-bottom: 30px;
+            padding: 15px;
+            background: var(--card-bg);
+            border-radius: 8px;
+        }
+        .stats span { margin-right: 15px; }
+        .topic { margin-bottom: 30px; }
+        .topic h2 {
+            color: var(--accent);
+            border-bottom: 2px solid var(--accent);
+            padding-bottom: 5px;
+            margin-bottom: 15px;
+        }
+        .item {
+            background: var(--card-bg);
+            border-radius: 8px;
+            padding: 15px;
+            margin-bottom: 12px;
+            border-left: 4px solid var(--accent-blue);
+            transition: all 0.2s;
+        }
+        .item:hover { transform: translateX(5px); }
+        .item.must-read { border-left-color: var(--accent); }
+        .item.recommended { border-left-color: var(--accent-yellow); }
+        .item.fyi { border-left-color: var(--text-dim); }
+        .item.liked { background: rgba(0, 210, 106, 0.1); }
+        .item.disliked { opacity: 0.4; }
+        .item-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-start;
+            gap: 10px;
+        }
+        .item-title {
+            font-size: 16px;
+            font-weight: 600;
+            flex: 1;
+        }
+        .item-title a {
+            color: var(--text);
+            text-decoration: none;
+        }
+        .item-title a:hover { color: var(--accent); }
+        .item-meta {
+            display: flex;
+            gap: 8px;
+            align-items: center;
+        }
+        .score {
+            background: var(--accent-blue);
+            padding: 2px 8px;
+            border-radius: 4px;
+            font-size: 12px;
+        }
+        .tag {
+            background: rgba(255,255,255,0.1);
+            padding: 2px 6px;
+            border-radius: 3px;
+            font-size: 11px;
+            color: var(--text-dim);
+        }
+        .actionable { color: var(--accent-green); }
+        .summary {
+            color: var(--text-dim);
+            font-size: 14px;
+            margin: 8px 0;
+        }
+        .relevance {
+            font-size: 12px;
+            color: var(--accent-yellow);
+            margin-top: 5px;
+        }
+        .feedback {
+            display: flex;
+            gap: 8px;
+            margin-top: 10px;
+        }
+        .feedback button {
+            background: transparent;
+            border: 1px solid var(--text-dim);
+            color: var(--text-dim);
+            padding: 4px 12px;
+            border-radius: 4px;
+            cursor: pointer;
+            font-size: 14px;
+            transition: all 0.2s;
+        }
+        .feedback button:hover {
+            border-color: var(--text);
+            color: var(--text);
+        }
+        .feedback button.active-like {
+            background: var(--accent-green);
+            border-color: var(--accent-green);
+            color: #fff;
+        }
+        .feedback button.active-dislike {
+            background: var(--accent);
+            border-color: var(--accent);
+            color: #fff;
+        }
+        .export-section {
+            margin-top: 40px;
+            padding: 20px;
+            background: var(--card-bg);
+            border-radius: 8px;
+        }
+        .export-section h3 { margin-bottom: 15px; }
+        .export-section button {
+            background: var(--accent);
+            border: none;
+            color: #fff;
+            padding: 10px 20px;
+            border-radius: 6px;
+            cursor: pointer;
+            font-size: 14px;
+            margin-right: 10px;
+        }
+        .export-section button:hover { opacity: 0.9; }
+        #feedback-output {
+            margin-top: 15px;
+            padding: 15px;
+            background: rgba(0,0,0,0.3);
+            border-radius: 4px;
+            font-family: monospace;
+            font-size: 12px;
+            white-space: pre-wrap;
+            display: none;
+        }
+    </style>
+</head>
+<body>
+    <h1>🤖 AI 日报 - 2025-11-26</h1>
+    <div class="stats">
+        <span>为【算法工程师】定制</span>
+        <span>🔥 必读 5</span>
+        <span>⭐ 推荐 15</span>
+        <span>📌 了解 10</span>
+        <span style="float:right">点击 👍/👎 即时反馈</span>
+    </div>
+    <div class="topic">
+        <h2>LLM进展</h2>
+        <div class="item recommended" data-id="0" data-title="EverMemOS：企业级智能记忆系统 LLM训练大致分为三个阶段，Pre-Training学知识，">
+            <div class="item-header">
+                <div class="item-title">
+                    <a href="https://x.com/Gorden_Sun/status/1993321624247189627" target="_blank">EverMemOS：企业级智能记忆系统 LLM训练大致分为三个阶段，Pre-Training学知识，SFT学说话，Post-Training学思考。这样的LLM</a>
+                </div>
+                <div class="item-meta">
+                    <span class="score">70分</span>
+                    
+                </div>
+            </div>
+            <div class="summary">EverMemOS，企业级智能记忆系统，解决LLM记忆问题。</div>
+            <div><span class="tag">LLM</span><span class="tag">记忆</span><span class="tag">AI助理</span></div>
+            <div class="relevance">💡 了解LLM记忆机制</div>
+            <div class="feedback">
+                <button onclick="feedback(0, 'like', this)">👍 想看更多</button>
+                <button onclick="feedback(0, 'dislike', this)">👎 不感兴趣</button>
+            </div>
+        </div>
+        <div class="item recommended" data-id="1" data-title="voice inline with chatgpt:">
+            <div class="item-header">
+                <div class="item-title">
+                    <a href="https://x.com/gdb/status/1993439038335021107" target="_blank">voice inline with chatgpt:</a>
+                </div>
+                <div class="item-meta">
+                    <span class="score">70分</span>
+                    <span class="actionable">🚀 可行动</span>
+                </div>
+            </div>
+            <div class="summary">ChatGPT Voice 可直接在chat中使用，无需单独模式。</div>
+            <div><span class="tag">ChatGPT</span><span class="tag">语音</span></div>
+            <div class="relevance">💡 OpenAI 新功能发布</div>
+            <div class="feedback">
+                <button onclick="feedback(1, 'like', this)">👍 想看更多</button>
+                <button onclick="feedback(1, 'dislike', this)">👎 不感兴趣</button>
+            </div>
+        </div>
+        <div class="item recommended" data-id="2" data-title="这段系统指令让 Gemini 3 Pro 智能体性能提升 5% 来自 @_philschmid 的分">
+            <div class="item-header">
+                <div class="item-title">
+                    <a href="https://x.com/shao__meng/status/1993476888174772702" target="_blank">这段系统指令让 Gemini 3 Pro 智能体性能提升 5% 来自 @_philschmid 的分享，一个针对 Gemini 3 Pro 模型的系统指令模板。</a>
+                </div>
+                <div class="item-meta">
+                    <span class="score">70分</span>
+                    <span class="actionable">🚀 可行动</span>
+                </div>
+            </div>
+            <div class="summary">Gemini 3 Pro系统指令模板提升智能体性能5%，已整合进官方文档。</div>
+            <div><span class="tag">Gemini</span><span class="tag">LLM</span><span class="tag">Prompt Engineering</span></div>
+            <div class="relevance">💡 Gemini性能优化技巧</div>
+            <div class="feedback">
+                <button onclick="feedback(2, 'like', this)">👍 想看更多</button>
+                <button onclick="feedback(2, 'dislike', this)">👎 不感兴趣</button>
+            </div>
+        </div>
+        <div class="item recommended" data-id="3" data-title="RT Elaina: 终于来了，ChatGPT的语音通话无需再在单独界面中进行了，直接在文字对话聊天">
+            <div class="item-header">
+                <div class="item-title">
+                    <a href="https://x.com/dotey/status/1993436205233717298" target="_blank">RT Elaina: 终于来了，ChatGPT的语音通话无需再在单独界面中进行了，直接在文字对话聊天中就可以进行，减少割裂感，也是及时响应模型变得越来越快速回应</a>
+                </div>
+                <div class="item-meta">
+                    <span class="score">70分</span>
+                    <span class="actionable">🚀 可行动</span>
+                </div>
+            </div>
+            <div class="summary">ChatGPT语音通话无需在单独界面中进行。</div>
+            <div><span class="tag">ChatGPT</span><span class="tag">OpenAI</span><span class="tag">语音</span></div>
+            <div class="relevance">💡 OpenAI官方更新</div>
+            <div class="feedback">
+                <button onclick="feedback(3, 'like', this)">👍 想看更多</button>
+                <button onclick="feedback(3, 'dislike', this)">👎 不感兴趣</button>
+            </div>
+        </div>
+    </div>
+    <div class="topic">
+        <h2>AI Agent</h2>
+        <div class="item must-read" data-id="4" data-title="Acontext （http://github.com/memodb-io/Acontext） 让 ">
+            <div class="item-header">
+                <div class="item-title">
+                    <a href="https://x.com/RyanMfer/status/1993281110240117075" target="_blank">Acontext （http://github.com/memodb-io/Acontext） 让 Agents 能自我学习、记忆、越用越好 欢迎builder</a>
+                </div>
+                <div class="item-meta">
+                    <span class="score">85分</span>
+                    <span class="actionable">🚀 可行动</span>
+                </div>
+            </div>
+            <div class="summary">Acontext: Agent 自我学习平台</div>
+            <div><span class="tag">AI Agent</span><span class="tag">开源</span><span class="tag">Acontext</span></div>
+            <div class="relevance">💡 Agent 自我学习，开源项目</div>
+            <div class="feedback">
+                <button onclick="feedback(4, 'like', this)">👍 想看更多</button>
+                <button onclick="feedback(4, 'dislike', this)">👎 不感兴趣</button>
+            </div>
+        </div>
+        <div class="item must-read" data-id="5" data-title="Coool">
+            <div class="item-header">
+                <div class="item-title">
+                    <a href="https://x.com/RyanMfer/status/1993234078611783875" target="_blank">Coool</a>
+                </div>
+                <div class="item-meta">
+                    <span class="score">85分</span>
+                    <span class="actionable">🚀 可行动</span>
+                </div>
+            </div>
+            <div class="summary">Acontext: Agent 自我学习平台</div>
+            <div><span class="tag">AI Agent</span><span class="tag">开源</span><span class="tag">Acontext</span></div>
+            <div class="relevance">💡 Agent 自我学习，开源项目</div>
+            <div class="feedback">
+                <button onclick="feedback(5, 'like', this)">👍 想看更多</button>
+                <button onclick="feedback(5, 'dislike', this)">👎 不感兴趣</button>
+            </div>
+        </div>
+        <div class="item must-read" data-id="6" data-title="RT elvis: Here's a visual summary of the new guide">
+            <div class="item-header">
+                <div class="item-title">
+                    <a href="https://x.com/omarsar0/status/1993478668388385249" target="_blank">RT elvis: Here's a visual summary of the new guide by Anthropic. It's on how to </a>
+                </div>
+                <div class="item-meta">
+                    <span class="score">85分</span>
+                    <span class="actionable">🚀 可行动</span>
+                </div>
+            </div>
+            <div class="summary">Anthropic Agent 工具使用指南</div>
+            <div><span class="tag">AI Agent</span><span class="tag">Anthropic</span><span class="tag">工具使用</span></div>
+            <div class="relevance">💡 工具使用方法</div>
+            <div class="feedback">
+                <button onclick="feedback(6, 'like', this)">👍 想看更多</button>
+                <button onclick="feedback(6, 'dislike', this)">👎 不感兴趣</button>
+            </div>
+        </div>
+        <div class="item must-read" data-id="7" data-title="RT elvis: MiniMax-M2 is a bigger deal than I thoug">
+            <div class="item-header">
+                <div class="item-title">
+                    <a href="https://x.com/omarsar0/status/1993343349169041493" target="_blank">RT elvis: MiniMax-M2 is a bigger deal than I thought! Just built a deep research</a>
+                </div>
+                <div class="item-meta">
+                    <span class="score">85分</span>
+                    <span class="actionable">🚀 可行动</span>
+                </div>
+            </div>
+            <div class="summary">MiniMax-M2 深度研究 Agent</div>
+            <div><span class="tag">AI Agent</span><span class="tag">MiniMax</span><span class="tag">M2</span></div>
+            <div class="relevance">💡 自提升Agent</div>
+            <div class="feedback">
+                <button onclick="feedback(7, 'like', this)">👍 想看更多</button>
+                <button onclick="feedback(7, 'dislike', this)">👎 不感兴趣</button>
+            </div>
+        </div>
+        <div class="item must-read" data-id="8" data-title="打造优秀 ChatGPT 应用的官方指南 OpenAI 开发者博客，针对开发者、产品经理和设计师，提">
+            <div class="item-header">
+                <div class="item-title">
+                    <a href="https://x.com/shao__meng/status/1993489407564038191" target="_blank">打造优秀 ChatGPT 应用的官方指南 OpenAI 开发者博客，针对开发者、产品经理和设计师，提供了一份实用指南，教你如何构建出色的 ChatGPT 应用。</a>
+                </div>
+                <div class="item-meta">
+                    <span class="score">85分</span>
+                    <span class="actionable">🚀 可行动</span>
+                </div>
+            </div>
+            <div class="summary">OpenAI发布ChatGPT应用构建指南，强调将产品核心优势转化为对话能力。</div>
+            <div><span class="tag">ChatGPT</span><span class="tag">OpenAI</span><span class="tag">AI Agent</span></div>
+            <div class="relevance">💡 实用指南，可立即学习</div>
+            <div class="feedback">
+                <button onclick="feedback(8, 'like', this)">👍 想看更多</button>
+                <button onclick="feedback(8, 'dislike', this)">👎 不感兴趣</button>
+            </div>
+        </div>
+        <div class="item recommended" data-id="9" data-title="如何编写优秀的 agents. md：来自 2500+ 代码库的经验总结 核心理念 传统的 &quo">
+            <div class="item-header">
+                <div class="item-title">
+                    <a href="https://x.com/shao__meng/status/1993481050908246251" target="_blank">如何编写优秀的 agents. md：来自 2500+ 代码库的经验总结 核心理念 传统的 &quot;你是一个有用的编程助手&quot; 这类模糊指令并不有效，真正起作用的是具体</a>
+                </div>
+                <div class="item-meta">
+                    <span class="score">75分</span>
+                    <span class="actionable">🚀 可行动</span>
+                </div>
+            </div>
+            <div class="summary">agents.md总结了编写优秀Agent的经验，强调角色定义和操作边界。</div>
+            <div><span class="tag">AI Agent</span><span class="tag">最佳实践</span><span class="tag">LLM</span></div>
+            <div class="relevance">💡 Agent开发最佳实践总结</div>
+            <div class="feedback">
+                <button onclick="feedback(9, 'like', this)">👍 想看更多</button>
+                <button onclick="feedback(9, 'dislike', this)">👎 不感兴趣</button>
+            </div>
+        </div>
+        <div class="item recommended" data-id="10" data-title="最近玩疯了。 这两周基本是在 Gemini 3 和 Nano Banana Pro 之间来回折腾，跟">
+            <div class="item-header">
+                <div class="item-title">
+                    <a href="https://x.com/frxiaobei/status/1993358220044517856" target="_blank">最近玩疯了。 这两周基本是在 Gemini 3 和 Nano Banana Pro 之间来回折腾，跟被点满了生图天赋一样，天天生成到天亮。 模型强大带来的效果丝</a>
+                </div>
+                <div class="item-meta">
+                    <span class="score">75分</span>
+                    <span class="actionable">🚀 可行动</span>
+                </div>
+            </div>
+            <div class="summary">Agent在真实业务中悄悄蓬勃发展</div>
+            <div><span class="tag">AI Agent</span><span class="tag">模型应用</span><span class="tag">业务价值</span></div>
+            <div class="relevance">💡 agent发展趋势</div>
+            <div class="feedback">
+                <button onclick="feedback(10, 'like', this)">👍 想看更多</button>
+                <button onclick="feedback(10, 'dislike', this)">👎 不感兴趣</button>
+            </div>
+        </div>
+    </div>
+    <div class="topic">
+        <h2>工具资源</h2>
+        <div class="item recommended" data-id="11" data-title="OCR Arena：AI 文档处理模型的实战竞技场 OCR 和 VLM 的实际表现如何，在官方 be">
+            <div class="item-header">
+                <div class="item-title">
+                    <a href="https://x.com/shao__meng/status/1993483339748327925" target="_blank">OCR Arena：AI 文档处理模型的实战竞技场 OCR 和 VLM 的实际表现如何，在官方 benchmark 之外，应该有更直观实际的对比，OCR Are</a>
+                </div>
+                <div class="item-meta">
+                    <span class="score">75分</span>
+                    <span class="actionable">🚀 可行动</span>
+                </div>
+            </div>
+            <div class="summary">OCR Arena提供真实文档测试平台，直观比较不同OCR和VLM模型的性能。</div>
+            <div><span class="tag">OCR</span><span class="tag">VLM</span><span class="tag">Benchmark</span></div>
+            <div class="relevance">💡 可用于模型对比和选择</div>
+            <div class="feedback">
+                <button onclick="feedback(11, 'like', this)">👍 想看更多</button>
+                <button onclick="feedback(11, 'dislike', this)">👎 不感兴趣</button>
+            </div>
+        </div>
+        <div class="item recommended" data-id="12" data-title="RT ListenHub AI: This is insane 🤯 I’ve never seen ">
+            <div class="item-header">
+                <div class="item-title">
+                    <a href="https://x.com/oran_ge/status/1993452794188382246" target="_blank">RT ListenHub AI: This is insane 🤯 I’ve never seen an AI slide deck like this. 10</a>
+                </div>
+                <div class="item-meta">
+                    <span class="score">70分</span>
+                    <span class="actionable">🚀 可行动</span>
+                </div>
+            </div>
+            <div class="summary">ListenHub AI生成演示文稿，快速生成视频。</div>
+            <div><span class="tag">AI工具</span><span class="tag">效率提升</span><span class="tag">视频生成</span></div>
+            <div class="relevance">💡 提升内容创作效率</div>
+            <div class="feedback">
+                <button onclick="feedback(12, 'like', this)">👍 想看更多</button>
+                <button onclick="feedback(12, 'dislike', this)">👎 不感兴趣</button>
+            </div>
+        </div>
+        <div class="item recommended" data-id="13" data-title="这个真的是发B站和视频号的神器 五分钟一个 我在b站发了一个rick and morty讲资本主义的">
+            <div class="item-header">
+                <div class="item-title">
+                    <a href="https://x.com/oran_ge/status/1993270886179520595" target="_blank">这个真的是发B站和视频号的神器 五分钟一个 我在b站发了一个rick and morty讲资本主义的，点赞收藏完播率都超高…</a>
+                </div>
+                <div class="item-meta">
+                    <span class="score">70分</span>
+                    <span class="actionable">🚀 可行动</span>
+                </div>
+            </div>
+            <div class="summary">Listenhub新功能，3步生成口播短视频。</div>
+            <div><span class="tag">AI工具</span><span class="tag">效率提升</span><span class="tag">视频生成</span></div>
+            <div class="relevance">💡 提升内容创作效率</div>
+            <div class="feedback">
+                <button onclick="feedback(13, 'like', this)">👍 想看更多</button>
+                <button onclick="feedback(13, 'dislike', this)">👎 不感兴趣</button>
+            </div>
+        </div>
+        <div class="item recommended" data-id="14" data-title="RT elvis: Re Learn more about MiniMax-M2 here: htt">
+            <div class="item-header">
+                <div class="item-title">
+                    <a href="https://x.com/omarsar0/status/1993473421955731875" target="_blank">RT elvis: Re Learn more about MiniMax-M2 here: https://platform.minimax.io/docs/</a>
+                </div>
+                <div class="item-meta">
+                    <span class="score">70分</span>
+                    <span class="actionable">🚀 可行动</span>
+                </div>
+            </div>
+            <div class="summary">MiniMax-M2 学习资源</div>
+            <div><span class="tag">MiniMax</span><span class="tag">M2</span></div>
+            <div class="relevance">💡 M2 学习资源</div>
+            <div class="feedback">
+                <button onclick="feedback(14, 'like', this)">👍 想看更多</button>
+                <button onclick="feedback(14, 'dislike', this)">👎 不感兴趣</button>
+            </div>
+        </div>
+        <div class="item recommended" data-id="15" data-title="RT 歸藏(guizang.ai): 藏师傅的相去哪儿就去哪儿相机终于发布了正式版！ 我还专门写了个">
+            <div class="item-header">
+                <div class="item-title">
+                    <a href="https://x.com/vista8/status/1993333297087496688" target="_blank">RT 歸藏(guizang.ai): 藏师傅的相去哪儿就去哪儿相机终于发布了正式版！ 我还专门写了个官网来介绍功能，同时增加了三个渠道，保证有一个你是能用。 赶</a>
+                </div>
+                <div class="item-meta">
+                    <span class="score">70分</span>
+                    <span class="actionable">🚀 可行动</span>
+                </div>
+            </div>
+            <div class="summary">Nano Banana Pro生成任意位置打卡照</div>
+            <div><span class="tag">Nano Banana Pro</span><span class="tag">Gemini 3</span><span class="tag">图像生成</span></div>
+            <div class="relevance">💡 Gemini API应用案例</div>
+            <div class="feedback">
+                <button onclick="feedback(15, 'like', this)">👍 想看更多</button>
+                <button onclick="feedback(15, 'dislike', this)">👎 不感兴趣</button>
+            </div>
+        </div>
+        <div class="item recommended" data-id="16" data-title="Black Forest Labs 发布 FLUX.2，依旧开源！ 支持文生图、多图参考以及图像编辑">
+            <div class="item-header">
+                <div class="item-title">
+                    <a href="https://x.com/op7418/status/1993347764324122912" target="_blank">Black Forest Labs 发布 FLUX.2，依旧开源！ 支持文生图、多图参考以及图像编辑，文本生成和提示词遵循能力大幅提高。 具体的模型能力有： -</a>
+                </div>
+                <div class="item-meta">
+                    <span class="score">70分</span>
+                    <span class="actionable">🚀 可行动</span>
+                </div>
+            </div>
+            <div class="summary">Black Forest Labs发布FLUX.2，依旧开源！</div>
+            <div><span class="tag">开源</span><span class="tag">文生图</span><span class="tag">图像编辑</span></div>
+            <div class="relevance">💡 开源图像工具</div>
+            <div class="feedback">
+                <button onclick="feedback(16, 'like', this)">👍 想看更多</button>
+                <button onclick="feedback(16, 'dislike', this)">👎 不感兴趣</button>
+            </div>
+        </div>
+    </div>
+    <div class="topic">
+        <h2>研究论文</h2>
+        <div class="item fyi" data-id="17" data-title="中文没有空格，分词就是个大问题。 中文一词多义，&quot;意思&quot;和&quot;意思&qu">
+            <div class="item-header">
+                <div class="item-title">
+                    <a href="https://x.com/vista8/status/1993194867590414701" target="_blank">中文没有空格，分词就是个大问题。 中文一词多义，&quot;意思&quot;和&quot;意思&quot;可能是完全不同的意思。 中文语序灵活，&quot;我打了他&quot;和&quot;他被我打了&quot;，主语都不一样。 所以，中文</a>
+                </div>
+                <div class="item-meta">
+                    <span class="score">40分</span>
+                    
+                </div>
+            </div>
+            <div class="summary">Word2Vec如何处理中文</div>
+            <div><span class="tag">Word2Vec</span><span class="tag">中文分词</span><span class="tag">自然语言处理</span></div>
+            <div class="relevance">💡 了解NLP模型</div>
+            <div class="feedback">
+                <button onclick="feedback(17, 'like', this)">👍 想看更多</button>
+                <button onclick="feedback(17, 'dislike', this)">👎 不感兴趣</button>
+            </div>
+        </div>
+    </div>
+    <div class="topic">
+        <h2>效率提升</h2>
+        <div class="item recommended" data-id="18" data-title="这条长推文 涨了300粉丝 但其实我什么都没做 我这个号大概1月份的时候7万多粉 到2月底左右10万">
+            <div class="item-header">
+                <div class="item-title">
+                    <a href="https://x.com/Yangyixxxx/status/1993233042828087733" target="_blank">这条长推文 涨了300粉丝 但其实我什么都没做 我这个号大概1月份的时候7万多粉 到2月底左右10万粉 是靠翻译长推文涨粉的 然而现在这些流程几乎90%都可以自</a>
+                </div>
+                <div class="item-meta">
+                    <span class="score">75分</span>
+                    <span class="actionable">🚀 可行动</span>
+                </div>
+            </div>
+            <div class="summary">AI 自动化运营方案</div>
+            <div><span class="tag">AI工具</span><span class="tag">自动化</span><span class="tag">效率提升</span></div>
+            <div class="relevance">💡 自动化运营工具</div>
+            <div class="feedback">
+                <button onclick="feedback(18, 'like', this)">👍 想看更多</button>
+                <button onclick="feedback(18, 'dislike', this)">👎 不感兴趣</button>
+            </div>
+        </div>
+        <div class="item recommended" data-id="19" data-title="RT yousa: 我把前几天在Trae的分享整理成了文字稿 「https://yousali.co">
+            <div class="item-header">
+                <div class="item-title">
+                    <a href="https://x.com/dotey/status/1993457570254930172" target="_blank">RT yousa: 我把前几天在Trae的分享整理成了文字稿 「https://yousali.com/posts/20251124-how-to-coding</a>
+                </div>
+                <div class="item-meta">
+                    <span class="score">70分</span>
+                    <span class="actionable">🚀 可行动</span>
+                </div>
+            </div>
+            <div class="summary">Trae分享整理文字稿：如何在真实生产项目里用AI Coding。</div>
+            <div><span class="tag">AI Coding</span><span class="tag">效率</span><span class="tag">工程实践</span></div>
+            <div class="relevance">💡 AI辅助编码实践</div>
+            <div class="feedback">
+                <button onclick="feedback(19, 'like', this)">👍 想看更多</button>
+                <button onclick="feedback(19, 'dislike', this)">👎 不感兴趣</button>
+            </div>
+        </div>
+        <div class="item fyi" data-id="20" data-title="Gemini 生成图片不清晰？是导出方法错了，@dotey 的方法扩散给更多人。 原来如此，我一直用">
+            <div class="item-header">
+                <div class="item-title">
+                    <a href="https://x.com/frxiaobei/status/1993189744894001313" target="_blank">Gemini 生成图片不清晰？是导出方法错了，@dotey 的方法扩散给更多人。 原来如此，我一直用的是图片点击大图后 cmd+c，只有100 多 k。</a>
+                </div>
+                <div class="item-meta">
+                    <span class="score">45分</span>
+                    <span class="actionable">🚀 可行动</span>
+                </div>
+            </div>
+            <div class="summary">Gemini生成图片导出的正确方法</div>
+            <div><span class="tag">Gemini</span><span class="tag">图片导出</span><span class="tag">效率</span></div>
+            <div class="relevance">💡 Gemini使用技巧</div>
+            <div class="feedback">
+                <button onclick="feedback(20, 'like', this)">👍 想看更多</button>
+                <button onclick="feedback(20, 'dislike', this)">👎 不感兴趣</button>
+            </div>
+        </div>
+        <div class="item fyi" data-id="21" data-title="#分享 最近写代码有点小焦虑，全程没有太大参与感，LLM 代码抽象的能力和准确性比半年前要提高很多。">
+            <div class="item-header">
+                <div class="item-title">
+                    <a href="https://x.com/xiaokedada/status/1993303677994779061" target="_blank">#分享 最近写代码有点小焦虑，全程没有太大参与感，LLM 代码抽象的能力和准确性比半年前要提高很多。我现在已经辩不过它了。 以前我还可以把运行的终端错误给它..</a>
+                </div>
+                <div class="item-meta">
+                    <span class="score">40分</span>
+                    
+                </div>
+            </div>
+            <div class="summary">分享者焦虑LLM代码能力提升，降低编码参与感。</div>
+            <div><span class="tag">LLM</span><span class="tag">编码</span><span class="tag">AI辅助</span></div>
+            <div class="relevance">💡 AI对开发的影响</div>
+            <div class="feedback">
+                <button onclick="feedback(21, 'like', this)">👍 想看更多</button>
+                <button onclick="feedback(21, 'dislike', this)">👎 不感兴趣</button>
+            </div>
+        </div>
+    </div>
+    <div class="topic">
+        <h2>行业动态</h2>
+        <div class="item recommended" data-id="22" data-title="OpenAI 的这个 Building an AI-native engineering team ">
+            <div class="item-header">
+                <div class="item-title">
+                    <a href="https://x.com/HiTw93/status/1993465724950790392" target="_blank">OpenAI 的这个 Building an AI-native engineering team 的 pdf 值得一看，告诉技术团队的管理者，如何构建一个 A</a>
+                </div>
+                <div class="item-meta">
+                    <span class="score">70分</span>
+                    
+                </div>
+            </div>
+            <div class="summary">OpenAI AI原生团队构建指南</div>
+            <div><span class="tag">OpenAI</span><span class="tag">团队建设</span><span class="tag">AI原生</span></div>
+            <div class="relevance">💡 构建AI团队的经验</div>
+            <div class="feedback">
+                <button onclick="feedback(22, 'like', this)">👍 想看更多</button>
+                <button onclick="feedback(22, 'dislike', this)">👎 不感兴趣</button>
+            </div>
+        </div>
+        <div class="item fyi" data-id="23" data-title="有一个分享来北京玩 会把最近两年团队在 Ai 下的转型经验和大伙分享 欢迎到时候线下面基">
+            <div class="item-header">
+                <div class="item-title">
+                    <a href="https://x.com/HiTw93/status/1993313526606446976" target="_blank">有一个分享来北京玩 会把最近两年团队在 Ai 下的转型经验和大伙分享 欢迎到时候线下面基</a>
+                </div>
+                <div class="item-meta">
+                    <span class="score">40分</span>
+                    
+                </div>
+            </div>
+            <div class="summary">AI 转型经验分享</div>
+            <div><span class="tag">AI转型</span><span class="tag">经验分享</span></div>
+            <div class="relevance">💡 转型经验参考</div>
+            <div class="feedback">
+                <button onclick="feedback(23, 'like', this)">👍 想看更多</button>
+                <button onclick="feedback(23, 'dislike', this)">👎 不感兴趣</button>
+            </div>
+        </div>
+        <div class="item fyi" data-id="24" data-title="ai可以3-5天快速构建出一个看起来还可以的产品演示 但涉及到产品细节的打磨需要三个月不止 在打磨细">
+            <div class="item-header">
+                <div class="item-title">
+                    <a href="https://x.com/Yangyixxxx/status/1993331972001980464" target="_blank">ai可以3-5天快速构建出一个看起来还可以的产品演示 但涉及到产品细节的打磨需要三个月不止 在打磨细节的过程里 需要不断去对抗快速 ai带来的问题</a>
+                </div>
+                <div class="item-meta">
+                    <span class="score">40分</span>
+                    
+                </div>
+            </div>
+            <div class="summary">AI 产品打磨经验</div>
+            <div><span class="tag">AI产品</span><span class="tag">产品细节</span></div>
+            <div class="relevance">💡 产品经验参考</div>
+            <div class="feedback">
+                <button onclick="feedback(24, 'like', this)">👍 想看更多</button>
+                <button onclick="feedback(24, 'dislike', this)">👎 不感兴趣</button>
+            </div>
+        </div>
+        <div class="item fyi" data-id="25" data-title="RT Shelly: 我今天才跟我们的开发说: 非技术人员 vibe 出来的，你就真的当前端体验用，">
+            <div class="item-header">
+                <div class="item-title">
+                    <a href="https://x.com/wwwgoubuli/status/1993350368991011116" target="_blank">RT Shelly: 我今天才跟我们的开发说: 非技术人员 vibe 出来的，你就真的当前端体验用，深刻理解业务人员想要什么，从功能，到体验到认知，跑演示或者自</a>
+                </div>
+                <div class="item-meta">
+                    <span class="score">40分</span>
+                    
+                </div>
+            </div>
+            <div class="summary">讨论非技术人员Vibe出来的东西和AI时代程序员的角色。</div>
+            <div><span class="tag">AI</span><span class="tag">程序员</span><span class="tag">角色</span></div>
+            <div class="relevance">💡 了解行业观点</div>
+            <div class="feedback">
+                <button onclick="feedback(25, 'like', this)">👍 想看更多</button>
+                <button onclick="feedback(25, 'dislike', this)">👎 不感兴趣</button>
+            </div>
+        </div>
+        <div class="item fyi" data-id="26" data-title="RT 阑夕: 晚点LatePost昨天发了一篇Kimi和MiniMax的近况报道，感觉现在也只有这家">
+            <div class="item-header">
+                <div class="item-title">
+                    <a href="https://x.com/wwwgoubuli/status/1993282974239146095" target="_blank">RT 阑夕: 晚点LatePost昨天发了一篇Kimi和MiniMax的近况报道，感觉现在也只有这家媒体还在关注「AI六小龙」了，自从巨头下场开始规模化投放之后</a>
+                </div>
+                <div class="item-meta">
+                    <span class="score">40分</span>
+                    
+                </div>
+            </div>
+            <div class="summary">Kimi和MiniMax等AI创业公司近况分析</div>
+            <div><span class="tag">AI六小龙</span><span class="tag">Kimi</span><span class="tag">MiniMax</span></div>
+            <div class="relevance">💡 了解行业竞争格局</div>
+            <div class="feedback">
+                <button onclick="feedback(26, 'like', this)">👍 想看更多</button>
+                <button onclick="feedback(26, 'dislike', this)">👎 不感兴趣</button>
+            </div>
+        </div>
+    </div>
+    <div class="topic">
+        <h2>其他</h2>
+        <div class="item fyi" data-id="27" data-title="antigravity的plan review太舒服了，非常reasonable的设计，定有高手指点">
+            <div class="item-header">
+                <div class="item-title">
+                    <a href="https://x.com/shing19_eth/status/1993172839143551458" target="_blank">antigravity的plan review太舒服了，非常reasonable的设计，定有高手指点</a>
+                </div>
+                <div class="item-meta">
+                    <span class="score">40分</span>
+                    
+                </div>
+            </div>
+            <div class="summary">赞扬antigravity的plan review设计合理。</div>
+            <div></div>
+            <div class="relevance">💡 无实质内容</div>
+            <div class="feedback">
+                <button onclick="feedback(27, 'like', this)">👍 想看更多</button>
+                <button onclick="feedback(27, 'dislike', this)">👎 不感兴趣</button>
+            </div>
+        </div>
+        <div class="item fyi" data-id="28" data-title="改了policy位置后，可以用上antigravity咯">
+            <div class="item-header">
+                <div class="item-title">
+                    <a href="https://x.com/shing19_eth/status/1993163762657116607" target="_blank">改了policy位置后，可以用上antigravity咯</a>
+                </div>
+                <div class="item-meta">
+                    <span class="score">40分</span>
+                    
+                </div>
+            </div>
+            <div class="summary">提到更改policy位置后可以使用antigravity。</div>
+            <div></div>
+            <div class="relevance">💡 无实质内容</div>
+            <div class="feedback">
+                <button onclick="feedback(28, 'like', this)">👍 想看更多</button>
+                <button onclick="feedback(28, 'dislike', this)">👎 不感兴趣</button>
+            </div>
+        </div>
+        <div class="item fyi" data-id="29" data-title="如果你问一个程序员，AI Coding 到底改变了什么。 他会告诉你： 模型写的代码不够稳、业务太复">
+            <div class="item-header">
+                <div class="item-title">
+                    <a href="https://x.com/frxiaobei/status/1993185342162452524" target="_blank">如果你问一个程序员，AI Coding 到底改变了什么。 他会告诉你： 模型写的代码不够稳、业务太复杂、工程化做不到、调库也不准、PR 质量不行。 但你问他： </a>
+                </div>
+                <div class="item-meta">
+                    <span class="score">40分</span>
+                    
+                </div>
+            </div>
+            <div class="summary">AI Coding对程序员的影响</div>
+            <div><span class="tag">AI Coding</span><span class="tag">程序员</span><span class="tag">职业发展</span></div>
+            <div class="relevance">💡 了解行业影响</div>
+            <div class="feedback">
+                <button onclick="feedback(29, 'like', this)">👍 想看更多</button>
+                <button onclick="feedback(29, 'dislike', this)">👎 不感兴趣</button>
+            </div>
+        </div>
+    </div>
+
+    <div class="export-section">
+        <h3>📤 导出反馈</h3>
+        <p style="color: var(--text-dim); margin-bottom: 15px;">
+            完成阅读后，点击导出按钮生成反馈数据，可以直接粘贴到 feedback.yaml
+        </p>
+        <button onclick="exportFeedback()">导出 YAML</button>
+        <button onclick="copyFeedback()">复制到剪贴板</button>
+        <button onclick="clearFeedback()">清除反馈</button>
+        <div id="feedback-output"></div>
+    </div>
+
+    <script>
+        const feedbackData = {};
+
+        function feedback(id, type, btn) {
+            const item = document.querySelector(`[data-id="${id}"]`);
+            const title = item.dataset.title;
+
+            item.classList.remove('liked', 'disliked');
+            item.querySelectorAll('.feedback button').forEach(b => {
+                b.classList.remove('active-like', 'active-dislike');
+            });
+
+            if (type === 'like') {
+                item.classList.add('liked');
+                btn.classList.add('active-like');
+                feedbackData[id] = { action: 'want_more', title: title };
+            } else if (type === 'dislike') {
+                item.classList.add('disliked');
+                btn.classList.add('active-dislike');
+                feedbackData[id] = { action: 'not_interested', title: title };
+            }
+
+            localStorage.setItem('ai_daily_feedback_2025-11-26', JSON.stringify(feedbackData));
+        }
+
+        function exportFeedback() {
+            const output = document.getElementById('feedback-output');
+            const items = Object.values(feedbackData);
+
+            if (items.length === 0) {
+                output.textContent = '# 没有反馈数据';
+                output.style.display = 'block';
+                return;
+            }
+
+            let yaml = `# 反馈数据 - 2025-11-26\n`;
+            yaml += `# 复制以下内容到 configs/feedback.yaml 的 feedback_log 下\n\n`;
+            yaml += `- date: "2025-11-26"\n`;
+            yaml += `  items:\n`;
+
+            items.forEach(item => {
+                yaml += `    - action: "${item.action}"\n`;
+                yaml += `      title: "${item.title}"\n`;
+            });
+
+            output.textContent = yaml;
+            output.style.display = 'block';
+        }
+
+        function copyFeedback() {
+            exportFeedback();
+            const output = document.getElementById('feedback-output');
+            navigator.clipboard.writeText(output.textContent).then(() => {
+                alert('已复制到剪贴板！');
+            });
+        }
+
+        function clearFeedback() {
+            Object.keys(feedbackData).forEach(k => delete feedbackData[k]);
+            localStorage.removeItem('ai_daily_feedback_2025-11-26');
+            document.querySelectorAll('.item').forEach(item => {
+                item.classList.remove('liked', 'disliked');
+                item.querySelectorAll('.feedback button').forEach(b => {
+                    b.classList.remove('active-like', 'active-dislike');
+                });
+            });
+            document.getElementById('feedback-output').style.display = 'none';
+        }
+
+        const saved = localStorage.getItem('ai_daily_feedback_2025-11-26');
+        if (saved) {
+            const parsed = JSON.parse(saved);
+            Object.assign(feedbackData, parsed);
+            Object.entries(parsed).forEach(([id, data]) => {
+                const item = document.querySelector(`[data-id="${id}"]`);
+                if (item) {
+                    if (data.action === 'want_more') {
+                        item.classList.add('liked');
+                    } else if (data.action === 'not_interested') {
+                        item.classList.add('disliked');
+                    }
+                }
+            });
+        }
+    </script>
+</body>
+</html>
