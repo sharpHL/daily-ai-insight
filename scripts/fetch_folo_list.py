@@ -25,7 +25,7 @@ load_dotenv()
 # Configuration
 LIST_ID = "216345814850997248"
 FOLO_API = "https://api.follow.is/entries"
-FILTER_DAYS = int(os.getenv("FOLO_FILTER_DAYS", "3"))  # Default 3 days
+FILTER_DAYS = int(os.getenv("FOLO_FILTER_DAYS", "1"))  # Default 1 day
 
 # User profile for filtering
 USER_PROFILE = {
@@ -133,7 +133,7 @@ async def fetch_list_content() -> list[dict[str, Any]]:
     print(f"Fetching content from list {LIST_ID}...")
 
     async with aiohttp.ClientSession() as session:
-        for page in range(max(5, FILTER_DAYS * 2)):  # Fetch enough pages based on days
+        for page in range(20):  # Fetch up to 20 pages to ensure all daily content
             body = {
                 "view": 1,
                 "withContent": True,
@@ -193,8 +193,25 @@ async def fetch_list_content() -> list[dict[str, Any]]:
                 print(f"  Page {page + 1}: Error - {e}")
                 break
 
-    print(f"Total fetched: {len(all_items)} items")
-    return all_items
+    # Filter by date
+    from datetime import datetime, timedelta, timezone
+    cutoff = datetime.now(timezone.utc) - timedelta(days=FILTER_DAYS)
+
+    filtered_items = []
+    for item in all_items:
+        pub_date = item.get("published_at", "")
+        if pub_date:
+            try:
+                item_date = datetime.fromisoformat(pub_date.replace("Z", "+00:00"))
+                if item_date >= cutoff:
+                    filtered_items.append(item)
+            except ValueError:
+                filtered_items.append(item)  # Keep if can't parse date
+        else:
+            filtered_items.append(item)
+
+    print(f"Total fetched: {len(all_items)} items, after date filter ({FILTER_DAYS} days): {len(filtered_items)} items")
+    return filtered_items
 
 
 async def llm_filter_item(item: dict[str, Any], gemini_key: str) -> dict[str, Any] | None:
