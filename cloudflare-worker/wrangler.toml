@@ -7,4 +7,4 @@ compatibility_date = "2024-01-01"
 # Then add the id below
 [[kv_namespaces]]
 binding = "FEEDBACK"
-id = "YOUR_KV_NAMESPACE_ID"
+id = "05d9c4fe172f462dbc362c713ee36248"
