@@ -1,13 +1,30 @@
 feedback_log:
 - date: '2025-12-04'
   items: []
+- date: '2025-12-05'
+  items:
+  - action: want_more
+    title: 关于 Open AI 代号 Garlic（大蒜🧄）的模型 Chris 说不会在近期推出 他们下周会发
+  - action: want_more
+    title: Gemini 3 这真是神操作 简单文本 prompt 就能生成一个网站，还能用手跟 3D 模型互动
+  - action: want_more
+    title: Google 🍌 Nano Banana 家族包揽 LMArena 图像编辑领域前三名： 1⃣Nan
+  - action: want_more
+    title: Next.js/React 爆出 CVSS 10.0 满分漏洞！ ⚠️ 所有使用 App Route
+  - action: want_more
+    title: 随手分享小技巧如何让你的命令行也支持指纹 Mac 很多时候我们用命令行工具执行系统动作时候，都需要手
+  - action: want_more
+    title: 明年真是个大年，主要的几个头部的AI公司都准备IPO。 之前OpenAI说要准备IPO，国内的智谱和
+  - action: want_more
+    title: 'RT Toby Wang: Referenced @dotey''s prompt using Nan'
 learned_preferences:
   additional_interests: []
   additional_filters: []
   source_adjustments: {}
-  keyword_adjustments: {}
+  keyword_adjustments:
+    prompt: 2
 statistics:
-  total_feedback_count: 0
-  liked_count: 0
+  total_feedback_count: 7
+  liked_count: 7
   disliked_count: 0
-  last_updated: '2025-12-05T01:26:44.095698'
+  last_updated: '2025-12-06T01:22:20.673123'
