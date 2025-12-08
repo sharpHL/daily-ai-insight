@@ -17,14 +17,30 @@ feedback_log:
     title: 明年真是个大年，主要的几个头部的AI公司都准备IPO。 之前OpenAI说要准备IPO，国内的智谱和
   - action: want_more
     title: 'RT Toby Wang: Referenced @dotey''s prompt using Nan'
+- date: '2025-12-07'
+  items:
+  - action: want_more
+    title: 构建高效的生产级上下文感知多智能体框架 Google 官方这篇博客深入探讨了在开发复杂的 AI 智能
+  - action: want_more
+    title: 'RT Shelly: 年度 review，写给我们团队的话：技术的源头是星辰大海，但赚钱的入口在“信'
+  - action: want_more
+    title: 🍌 nano banana pro prompt Use this prompt to genera
+  - action: want_more
+    title: This is a really good report on the reality of bui
+  - action: want_more
+    title: 期待看到更多有趣的、有价值的应用诞生。 Let’s build something real.
 learned_preferences:
   additional_interests: []
   additional_filters: []
   source_adjustments: {}
   keyword_adjustments:
-    prompt: 2
+    prompt: 4
+    google: 2
+    nano: 2
+    banana: 2
+    this: 2
 statistics:
-  total_feedback_count: 7
-  liked_count: 7
+  total_feedback_count: 12
+  liked_count: 12
   disliked_count: 0
-  last_updated: '2025-12-07T01:42:35.483783'
+  last_updated: '2025-12-08T01:26:39.692577'
