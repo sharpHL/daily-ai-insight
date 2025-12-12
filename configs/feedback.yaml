@@ -29,6 +29,24 @@ feedback_log:
     title: This is a really good report on the reality of bui
   - action: want_more
     title: 期待看到更多有趣的、有价值的应用诞生。 Let’s build something real.
+- date: '2025-12-11'
+  items:
+  - action: want_more
+    title: 阿里千问公测才23天，月活用户就突破3000万。 更猛的是，刚宣布完这个数字，就把AI PPT、AI
+  - action: want_more
+    title: Cursor 效能实战：这家 290 亿美元巨头如何用 AI 自动解决 80% 的内部支持需求 Cu
+  - action: want_more
+    title: Agentic AI Foundation — advancing open-source agen
+  - action: want_more
+    title: 1) chatgpt summarizes insights about you into 1 li
+- date: '2025-12-10'
+  items:
+  - action: want_more
+    title: 目前觉得还不错的读AI论文方式分享： 1. 原始论文PDF放在左屏幕。 用系统自带或任意分屏工具，比
+  - action: want_more
+    title: Github涨星最好的办法就是分享提示词，哈哈哈。 邪修啊！ 不过Nano Banana pro确实
+  - action: want_more
+    title: 速度提升 4 倍、精度比肩 Claude Code：深度解读 @relace_ai 的「代码检索新架
 learned_preferences:
   additional_interests: []
   additional_filters: []
@@ -37,10 +55,10 @@ learned_preferences:
     prompt: 4
     google: 2
     nano: 2
-    banana: 2
+    banana: 3
     this: 2
 statistics:
-  total_feedback_count: 12
-  liked_count: 12
+  total_feedback_count: 19
+  liked_count: 19
   disliked_count: 0
-  last_updated: '2025-12-11T01:28:55.881331'
+  last_updated: '2025-12-12T01:28:29.145542'
