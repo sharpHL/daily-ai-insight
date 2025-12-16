@@ -47,6 +47,20 @@ feedback_log:
     title: Github涨星最好的办法就是分享提示词，哈哈哈。 邪修啊！ 不过Nano Banana pro确实
   - action: want_more
     title: 速度提升 4 倍、精度比肩 Claude Code：深度解读 @relace_ai 的「代码检索新架
+- date: '2025-12-15'
+  items:
+  - action: want_more
+    title: 主流 AI 应用如何处理「记忆」？ · ChatGPT：全量注入与轻量摘要 - 更贴心的伙伴 · C
+  - action: want_more
+    title: 'RT Stometa: 开始玩推特三个月了。这周跑了625次测试，发现了个问题。 背景是这样的： 做'
+  - action: not_interested
+    title: 今天在国家天文台拍的星空延时摄影，里面应该有不少流星，冻麻了
+  - action: not_interested
+    title: 补一张流星
+  - action: want_more
+    title: Skills are all you need!
+  - action: want_more
+    title: 2026年软件工程师求职生存指南 2023年那套成为软件工程师的方法，到了2026年将不再适用。 随
 learned_preferences:
   additional_interests: []
   additional_filters: []
@@ -57,8 +71,9 @@ learned_preferences:
     nano: 2
     banana: 3
     this: 2
+    you: 2
 statistics:
-  total_feedback_count: 19
-  liked_count: 19
-  disliked_count: 0
-  last_updated: '2025-12-15T01:41:12.928607'
+  total_feedback_count: 25
+  liked_count: 23
+  disliked_count: 2
+  last_updated: '2025-12-16T01:38:40.276711'
